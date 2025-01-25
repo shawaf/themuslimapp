@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">برنامج المسلم</string>
+
+    // Counter
+    <string name="fajr_khatm">ختام صلاة الفجر</string>
+    <string name="duhur_khatm">ختام صلاة الظهر</string>
+    <string name="asr_khatm">ختام صلاة العصر</string>
+    <string name="maghrib_khatm">ختام صلاة المغرب</string>
+    <string name="ishaa_khatm">ختام صلاة العشاء</string>
+
+    //Info
+    <string name="sanad">السند</string>
+
+    //SharedPrefers
+    <string name="preference_file_key">MainSharedPrefersKey</string>
+    <string name="prefers_config_key">Config</string>
+</resources>
