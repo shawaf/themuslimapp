@@ -1,4 +1,4 @@
-package me.shawaf.themuslimapp.features.info.presentation.screen
+package me.shawaf.themuslimapp.features.info.presentation
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.padding
@@ -12,7 +12,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import me.shawaf.themuslimapp.R
-import me.shawaf.themuslimapp.data.local.ConfigModel
+import me.shawaf.themuslimapp.data.local.prefers.ConfigModel
 import me.shawaf.themuslimapp.features.info.presentation.view.SanadItem
 import me.shawaf.themuslimapp.ui.components.AppScaffold
 import me.shawaf.themuslimapp.utils.AzkarUtils

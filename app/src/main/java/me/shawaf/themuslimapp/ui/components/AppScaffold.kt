@@ -17,7 +17,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import me.shawaf.themuslimapp.data.local.ConfigModel
+import me.shawaf.themuslimapp.data.local.prefers.ConfigModel
 import me.shawaf.themuslimapp.ui.theme.Typography
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")

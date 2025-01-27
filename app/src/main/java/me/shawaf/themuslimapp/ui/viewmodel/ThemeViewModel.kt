@@ -1,4 +1,4 @@
-package me.shawaf.themuslimapp.features.root
+package me.shawaf.themuslimapp.ui.viewmodel
 
 import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.State

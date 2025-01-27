@@ -18,7 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import me.shawaf.themuslimapp.features.main.data.local.entity.ZekrEntity
+import me.shawaf.themuslimapp.data.local.dp.entity.ZekrEntity
 import me.shawaf.themuslimapp.ui.theme.Typography
 
 @Composable

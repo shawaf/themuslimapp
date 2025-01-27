@@ -1,4 +1,4 @@
-package me.shawaf.themuslimapp.features.main.presentation.view
+package me.shawaf.themuslimapp.features.counter.presentation.view
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween

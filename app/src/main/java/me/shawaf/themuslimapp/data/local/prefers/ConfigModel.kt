@@ -1,4 +1,4 @@
-package me.shawaf.themuslimapp.data.local
+package me.shawaf.themuslimapp.data.local.prefers
 
 data class ConfigModel(
     val soundEnabled: Boolean = true,

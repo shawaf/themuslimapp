@@ -3,8 +3,8 @@ package me.shawaf.themuslimapp.utils
 import android.content.Context
 import com.google.gson.Gson
 import me.shawaf.themuslimapp.R
-import me.shawaf.themuslimapp.features.main.data.local.entity.AzkarWrapper
-import me.shawaf.themuslimapp.features.main.data.local.entity.ZekrEntity
+import me.shawaf.themuslimapp.data.local.dp.entity.AzkarWrapper
+import me.shawaf.themuslimapp.data.local.dp.entity.ZekrEntity
 
 object AzkarUtils {
 

@@ -1,4 +1,4 @@
-package me.shawaf.themuslimapp.features.main.presentation.screen
+package me.shawaf.themuslimapp.features.main.presentation
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
@@ -20,8 +20,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import me.shawaf.themuslimapp.R
-import me.shawaf.themuslimapp.features.main.presentation.view.DragAndDropToggle
-import me.shawaf.themuslimapp.features.main.presentation.view.HorizontalCardSwitcher
+import me.shawaf.themuslimapp.features.counter.presentation.view.DragAndDropToggle
+import me.shawaf.themuslimapp.features.counter.presentation.view.HorizontalCardSwitcher
 import me.shawaf.themuslimapp.features.main.presentation.viewmodel.MainViewModel
 import me.shawaf.themuslimapp.ui.components.AppScaffold
 import me.shawaf.themuslimapp.ui.theme.Typography
@@ -41,13 +41,13 @@ fun MainScreen(
     onNavigateToHistory: () -> Unit,
     onNavigateToInfo: () -> Unit
 ) {
-    var counter by remember { mutableIntStateOf(0) }
+    var counter by mainViewModel.counter
     var currentZekrCounter by remember { mutableIntStateOf(0) }
     var switchToNextZekrCard by remember { mutableStateOf(false) }
     val configModel by mainViewModel.configModel.collectAsState()
 
     AppScaffold(
-        LocalContext.current.getString(R.string.fajr_khatm),
+        LocalContext.current.getString(R.string.salat_khatm),
         configModel = configModel,
         onBackPressed = null,
         withBottomBar = true,

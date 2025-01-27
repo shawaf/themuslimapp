@@ -1,15 +1,15 @@
 package me.shawaf.themuslimapp.features.main.presentation.viewmodel
 
 import android.content.Context
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import me.shawaf.themuslimapp.data.local.ConfigModel
+import me.shawaf.themuslimapp.data.local.prefers.ConfigModel
 import me.shawaf.themuslimapp.data.local.prefers.SharedPreferencesManager
-import me.shawaf.themuslimapp.features.main.data.local.entity.ZekrEntity
+import me.shawaf.themuslimapp.data.local.dp.entity.ZekrEntity
 import me.shawaf.themuslimapp.utils.AzkarUtils
 import javax.inject.Inject
 
@@ -18,8 +18,10 @@ class MainViewModel @Inject constructor(
     private var sharedPreferencesManager: SharedPreferencesManager
 ) : ViewModel() {
 
-    private var _configModel = MutableStateFlow(ConfigModel())
-    val configModel: StateFlow<ConfigModel> get() = _configModel
+    var counter  = mutableIntStateOf(0)
+
+    var configModel = MutableStateFlow(ConfigModel())
+        private set
 
     init {
         viewModelScope.launch {
@@ -29,13 +31,13 @@ class MainViewModel @Inject constructor(
 
     private suspend fun getConfigData() {
         val savedConfigModel = sharedPreferencesManager.getConfig()
-        _configModel.value = savedConfigModel
+        configModel.value = savedConfigModel
     }
 
     fun toggleSoundState() {
         viewModelScope.launch {
-            val updatedConfig = _configModel.value.copy(
-                soundEnabled = !_configModel.value.soundEnabled
+            val updatedConfig = configModel.value.copy(
+                soundEnabled = !configModel.value.soundEnabled
             )
             sharedPreferencesManager.saveConfig(updatedConfig)
             getConfigData()
@@ -44,8 +46,8 @@ class MainViewModel @Inject constructor(
 
     fun toggleVibrationState() {
         viewModelScope.launch {
-            val updatedConfig = _configModel.value.copy(
-                vibrationEnabled = !_configModel.value.vibrationEnabled
+            val updatedConfig = configModel.value.copy(
+                vibrationEnabled = !configModel.value.vibrationEnabled
             )
             sharedPreferencesManager.saveConfig(updatedConfig)
             getConfigData()

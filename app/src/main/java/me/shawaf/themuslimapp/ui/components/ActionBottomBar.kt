@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import me.shawaf.themuslimapp.R
-import me.shawaf.themuslimapp.data.local.ConfigModel
+import me.shawaf.themuslimapp.data.local.prefers.ConfigModel
 
 @Composable
 fun ActionBottomBar(

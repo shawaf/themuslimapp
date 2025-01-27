@@ -2,7 +2,6 @@ package me.shawaf.themuslimapp.data.local.prefers
 
 import android.content.SharedPreferences
 import com.google.gson.Gson
-import me.shawaf.themuslimapp.data.local.ConfigModel
 
 class SharedPreferencesManagerImp(
     private var sharedPreferences: SharedPreferences, private var gson: Gson

@@ -1,4 +1,4 @@
-package me.shawaf.themuslimapp.features.root
+package me.shawaf.themuslimapp.features
 
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -6,10 +6,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import me.shawaf.themuslimapp.features.main.presentation.screen.MainScreen
+import me.shawaf.themuslimapp.features.main.presentation.MainScreen
 import me.shawaf.themuslimapp.features.main.presentation.viewmodel.MainViewModel
 import me.shawaf.themuslimapp.features.history.presentation.HistoryScreen
-import me.shawaf.themuslimapp.features.info.presentation.screen.InfoScreen
+import me.shawaf.themuslimapp.features.info.presentation.InfoScreen
+import me.shawaf.themuslimapp.ui.viewmodel.ThemeViewModel
 
 @Composable
 fun TheMuslimApp(themeViewModel: ThemeViewModel) {

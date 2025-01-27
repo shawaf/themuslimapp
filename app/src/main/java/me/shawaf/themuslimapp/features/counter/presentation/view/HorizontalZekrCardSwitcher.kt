@@ -1,4 +1,4 @@
-package me.shawaf.themuslimapp.features.main.presentation.view
+package me.shawaf.themuslimapp.features.counter.presentation.view
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
@@ -20,7 +20,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import me.shawaf.themuslimapp.features.main.data.local.entity.ZekrEntity
+import me.shawaf.themuslimapp.data.local.dp.entity.ZekrEntity
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 @SuppressLint("CoroutineCreationDuringComposition")
@@ -67,7 +67,7 @@ fun HorizontalCardSwitcher(
                     shape = MaterialTheme.shapes.medium,
                     elevation = CardDefaults.cardElevation(8.dp),
                 ) {
-                    ZekrItem(zekrEntity = card)
+                    ZekrView(zekrEntity = card)
                 }
             }
         }
