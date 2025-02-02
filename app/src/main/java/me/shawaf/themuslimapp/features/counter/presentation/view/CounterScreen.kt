@@ -40,7 +40,8 @@ fun CounterScreen(
     onNavigateToInfo: () -> Unit
 ) {
     var currentZekrCount by remember { mutableIntStateOf(0) }
-    var switchToNextZekrCard by remember { mutableStateOf(false) }
+    var nextCardIndex by remember { mutableStateOf(0) }
+    val lastNextCardIndexValue = 0
     val counterViewState by counterViewModel.viewState.collectAsState()
 
     AppScaffold(LocalContext.current.getString(R.string.salat_khatm),
@@ -51,7 +52,7 @@ fun CounterScreen(
         onNavigateToInfo = onNavigateToInfo,
         onNavigateToHistory = onNavigateToHistory,
         onToggleSoundEnabledState = { counterViewModel.handleIntent(CounterIntent.ToggleSoundState) },
-        onToggleVibrationEnabledState = { counterViewModel.handleIntent(CounterIntent.ToggleSoundState) }) {
+        onToggleVibrationEnabledState = { counterViewModel.handleIntent(CounterIntent.ToggleVibrationState) }) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween,
@@ -62,12 +63,10 @@ fun CounterScreen(
             val context = LocalContext.current
             val azkarList = counterViewState.zekrList
             if (azkarList.isNotEmpty()) HorizontalCardSwitcher(
-                azkarList,
-                switchToNextZekrCard
+                azkarList, nextCardIndex
             ) { zekrEntity ->
                 counterViewModel.handleIntent(CounterIntent.SetCurrentZekrEntity(zekrEntity))
                 currentZekrCount = zekrEntity.count
-                switchToNextZekrCard = false // Reset after switching
             }
             Text(
                 text = "${counterViewState.counter}",
@@ -76,23 +75,32 @@ fun CounterScreen(
                 color = MaterialTheme.colorScheme.primary,
             )
             DragAndDropToggle {
+                //Increase Counter
                 counterViewModel.handleIntent(CounterIntent.IncreaseCounter)
+
+                //Add new zekr to database
                 counterViewModel.handleIntent(CounterIntent.SaveZekrUpdate)
+
+                //Switch Cards if card/zekr count finish
                 val counter = counterViewState.counter + 1
-                switchToNextZekrCard = if (counter >= currentZekrCount) {
+                nextCardIndex = if (counter >= currentZekrCount) {
                     // Reset Counter with delay, When Zekr Times Finished
                     CoroutineScope(Dispatchers.Main).launch {
                         delay(300)
                         counterViewModel.handleIntent(CounterIntent.ResetCounter)
                     }
-                    true
-                } else false
+                    if (nextCardIndex >= azkarList.lastIndex) 0
+                    else nextCardIndex + 1
+                } else nextCardIndex
 
+                //Play Zekr Sound if it was Enabled
                 if (counterViewState.configModel.soundEnabled) {
                     SoundUtils.playClickSound(context)
                 }
+
+                //Play Zekr Vibration if it was Enabled
                 if (counterViewState.configModel.vibrationEnabled) {
-                    VibrationUtils.vibrate(context, switchToNextZekrCard)
+                    VibrationUtils.vibrate(context, false)
                 }
             }
         }

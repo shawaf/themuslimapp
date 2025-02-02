@@ -11,7 +11,6 @@ import me.shawaf.themuslimapp.data.local.model.ZekrModel
 import me.shawaf.themuslimapp.data.local.prefers.SharedPreferencesManager
 import me.shawaf.themuslimapp.features.counter.domain.usecase.GetJsonZekrListUseCase
 import me.shawaf.themuslimapp.features.counter.domain.usecase.InsertZekrUseCase
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -39,7 +38,6 @@ class CounterViewModel @Inject constructor(
             }
 
             is CounterIntent.SetCurrentZekrEntity -> {
-                Timber.e("Current Zekr Model : ${viewIntent.zekrModel}")
                 _viewState.value =
                     _viewState.value.copy(currentZekrEntity = viewIntent.zekrModel.toZekrEntity())
             }
@@ -67,7 +65,6 @@ class CounterViewModel @Inject constructor(
             }
 
             is CounterIntent.SaveZekrUpdate -> {
-
                 viewModelScope.launch {
                     val currentZekrEntity =
                         _viewState.value.currentZekrEntity.copy(createdAt = System.currentTimeMillis())
