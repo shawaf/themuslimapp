@@ -1,15 +1,74 @@
+# ========== Android/IntelliJ IDEA Specific ==========
+
+# Ignore all local IDE settings
+.idea/
 *.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
+*.ipr
+*.iws
+
+# Android Studio's workspace file
 /.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
+/.idea/tasks.xml
+/.idea/gradle.xml
+/.idea/libraries/
+
+# Ignore build output directories
+/build/
+*/build/
+
+# Local configuration files
+/local.properties
+
+# Ignore Android generated files
+/captures/
+/.navigation/
+/output.json
+
+# ========== Gradle Related ==========
+
+# Ignore Gradle cache and logs
+.gradle/
+/.gradle/
+/gradle-app.setting
+
+# Ignore Gradle Wrapper logs
+gradle.log
+
+# ========== Keystore Files (Sensitive) ==========
+*.keystore
+*.jks
+
+# ========== Dependency & Build Caches ==========
+/.externalNativeBuild/
+.cxx/
+
+# Ignore generated APKs, AABs & Proguard Mapping Files
+*.apk
+*.aab
+*.ap_
+mapping.txt
+*/mapping.txt
+/logs/
+
+# Ignore crash reports
+crashlytics-build.properties
+fabric.properties
+
+# ========== Miscellaneous ==========
+# Ignore OS-specific files
 .DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
-local.properties
+Thumbs.db
+desktop.ini
+
+# Ignore log files
+*.log
+
+# Ignore test coverage files
+*.ec
+
+# Ignore JetBrains IDE index files
+/.idea/index/
+
+# Ignore Firebase and Google Services JSON (Add these only if needed)
+google-services.json
+firebase-debug.log
