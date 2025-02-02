@@ -14,5 +14,6 @@ fun TheMuslimAppTheme(
         colorScheme = colorScheme,
         typography = Typography,
         content = content,
+        shapes = Shapes
     )
 }

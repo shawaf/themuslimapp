@@ -1,12 +1,10 @@
-package me.shawaf.themuslimapp.features.info.presentation.view
+package me.shawaf.themuslimapp.features.history.presentation.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -15,17 +13,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import me.shawaf.themuslimapp.data.local.dp.entity.ZekrEntity
-import me.shawaf.themuslimapp.data.local.model.ZekrModel
-import me.shawaf.themuslimapp.ui.theme.Typography
+import me.shawaf.themuslimapp.R
+import me.shawaf.themuslimapp.features.history.presentation.model.HistoryZekrUIModel
 import me.shawaf.themuslimapp.ui.theme.cardElevation
 import me.shawaf.themuslimapp.ui.theme.cardTextPadding
 
 @Composable
-fun SanadItem(zekrModel: ZekrModel) {
+fun HistoryZekrItem(historyZekrUIModel: HistoryZekrUIModel) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = MaterialTheme.shapes.medium,
@@ -33,28 +29,31 @@ fun SanadItem(zekrModel: ZekrModel) {
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.surface)
                 .padding(cardTextPadding),
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.Start
         ) {
             Text(
-                text = zekrModel.zekr,
-                textAlign = TextAlign.Start,
-                style = Typography.titleSmall,
+                text = historyZekrUIModel.zekr,
+                style = MaterialTheme.typography.titleSmall,
                 color = Color.White,
-                maxLines = 10,
+                textAlign = TextAlign.Start,
+                maxLines = 10
+
             )
 
             Text(
-                text = "السند : ${zekrModel.sanad}",
+                text = LocalContext.current.getString(
+                    R.string.count_number, "${historyZekrUIModel.count}"
+                ),
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.primary,
                 textAlign = TextAlign.Start,
-                style = Typography.titleMedium,
-                color = MaterialTheme.colorScheme.secondary,
-                maxLines = 10,
-            )
+                maxLines = 10
 
+            )
         }
     }
 }

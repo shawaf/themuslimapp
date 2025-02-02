@@ -6,33 +6,38 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import me.shawaf.themuslimapp.features.counter.presentation.view.CounterScreen
+import me.shawaf.themuslimapp.features.counter.presentation.viewmodel.CounterViewModel
 import me.shawaf.themuslimapp.features.main.presentation.MainScreen
 import me.shawaf.themuslimapp.features.main.presentation.viewmodel.MainViewModel
 import me.shawaf.themuslimapp.features.history.presentation.HistoryScreen
+import me.shawaf.themuslimapp.features.history.presentation.HistoryViewModel
 import me.shawaf.themuslimapp.features.info.presentation.InfoScreen
+import me.shawaf.themuslimapp.features.info.presentation.InfoViewModel
 import me.shawaf.themuslimapp.ui.viewmodel.ThemeViewModel
 
 @Composable
 fun TheMuslimApp(themeViewModel: ThemeViewModel) {
     val navController: NavHostController = rememberNavController()
-    val mainViewModel: MainViewModel = hiltViewModel()
 
     NavHost(navController = navController, startDestination = "counter") {
         composable("counter") {
-            MainScreen(
-                mainViewModel,
+            val counterViewModel: CounterViewModel = hiltViewModel()
+            CounterScreen(
+                counterViewModel = counterViewModel,
                 onSwitchTheme = { themeViewModel.switchToNextTheme() }, // Trigger theme change
                 onNavigateToHistory = { navController.navigate("history") },
                 onNavigateToInfo = { navController.navigate("info") },
             )
         }
         composable("history") {
-            HistoryScreen(onSwitchTheme = { themeViewModel.switchToNextTheme() }, // Trigger theme change
-                onNavigateBack = { navController.popBackStack() })
+            val historyViewModel: HistoryViewModel = hiltViewModel()
+            HistoryScreen(historyViewModel,onNavigateBack = { navController.popBackStack() })
         }
 
         composable("info") {
-            InfoScreen(onNavigateBack = { navController.popBackStack() })
+            val infoViewModel: InfoViewModel = hiltViewModel()
+            InfoScreen(viewModel = infoViewModel, onNavigateBack = { navController.popBackStack() })
         }
     }
 }

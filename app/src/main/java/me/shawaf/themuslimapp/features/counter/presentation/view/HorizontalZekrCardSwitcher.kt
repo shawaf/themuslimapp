@@ -22,11 +22,13 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import me.shawaf.themuslimapp.data.local.dp.entity.ZekrEntity
 import kotlinx.coroutines.flow.distinctUntilChanged
+import me.shawaf.themuslimapp.data.local.model.ZekrModel
+import me.shawaf.themuslimapp.ui.theme.cardElevation
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun HorizontalCardSwitcher(
-    zekrList: List<ZekrEntity>, nextItem: Boolean, onSwitchCard: (ZekrEntity) -> Unit
+    zekrList: List<ZekrModel>, nextItem: Boolean, onSwitchCard: (ZekrModel) -> Unit
 ) {
     val cardWidth = 300.dp
     val cardSpacing = 16.dp
@@ -65,9 +67,9 @@ fun HorizontalCardSwitcher(
                         .width(cardWidth)
                         .height(300.dp),
                     shape = MaterialTheme.shapes.medium,
-                    elevation = CardDefaults.cardElevation(8.dp),
+                    elevation = CardDefaults.cardElevation(cardElevation),
                 ) {
-                    ZekrView(zekrEntity = card)
+                    ZekrView(zekrModel = card)
                 }
             }
         }

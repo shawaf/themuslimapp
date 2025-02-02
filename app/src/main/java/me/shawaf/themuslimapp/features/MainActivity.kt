@@ -9,10 +9,8 @@ import me.shawaf.themuslimapp.ui.viewmodel.ThemeViewModel
 import me.shawaf.themuslimapp.ui.components.AppGradientBackground
 import me.shawaf.themuslimapp.ui.theme.TheMuslimAppTheme
 import dagger.hilt.android.AndroidEntryPoint
-
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

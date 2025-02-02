@@ -15,20 +15,22 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import me.shawaf.themuslimapp.data.local.dp.entity.ZekrEntity
+import me.shawaf.themuslimapp.data.local.model.ZekrModel
 import me.shawaf.themuslimapp.ui.theme.Typography
+import me.shawaf.themuslimapp.ui.theme.cardTextPadding
 
 @Composable
-fun ZekrView(zekrEntity: ZekrEntity) {
+fun ZekrView(zekrModel: ZekrModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.surface)
-            .padding(16.dp),
+            .padding(cardTextPadding),
         verticalArrangement = Arrangement.SpaceEvenly,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = zekrEntity.zekr,
+            text = zekrModel.zekr,
             textAlign = TextAlign.Center,
             style = Typography.titleMedium,
             color = Color.White,
@@ -36,7 +38,7 @@ fun ZekrView(zekrEntity: ZekrEntity) {
         )
 
         Text(
-            text = " عدد المرات : ${zekrEntity.count}",
+            text = " عدد المرات : ${zekrModel.count}",
             textAlign = TextAlign.Left,
             fontSize = 14.sp,
             style = Typography.titleMedium,
