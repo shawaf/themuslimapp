@@ -20,7 +20,6 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import me.shawaf.themuslimapp.data.local.dp.entity.ZekrEntity
 import kotlinx.coroutines.flow.distinctUntilChanged
 import me.shawaf.themuslimapp.data.local.model.ZekrModel
 import me.shawaf.themuslimapp.ui.theme.cardElevation
@@ -28,7 +27,7 @@ import me.shawaf.themuslimapp.ui.theme.cardElevation
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun HorizontalCardSwitcher(
-    zekrList: List<ZekrModel>, nextItem: Boolean, onSwitchCard: (ZekrModel) -> Unit
+    zekrList: List<ZekrModel>, nextItemIndex: Int, onSwitchCard: (ZekrModel) -> Unit
 ) {
     val cardWidth = 300.dp
     val cardSpacing = 16.dp
@@ -45,13 +44,8 @@ fun HorizontalCardSwitcher(
     }
 
     // Switch to next Card when nextItem is true
-    LaunchedEffect(nextItem) {
-        if (nextItem) {
-            val nextIndex =
-                (lazyListState.firstVisibleItemIndex + 1).coerceAtMost(zekrList.size - 1)
-            // Scroll to the next item
-            lazyListState.animateScrollToItem(nextIndex)
-        }
+    LaunchedEffect(nextItemIndex) {
+        lazyListState.animateScrollToItem(nextItemIndex)
     }
 
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
