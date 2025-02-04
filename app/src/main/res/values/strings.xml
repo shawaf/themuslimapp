@@ -6,7 +6,7 @@
     <string name="prefers_config_key">Config</string>
 
     // Counter
-    <string name="salat_khatm">ختام صلاة الفجر</string>
+    <string name="salat_khatm">ختام الصلاة</string>
     <string name="fajr_khatm">ختام صلاة الفجر</string>
     <string name="duhur_khatm">ختام صلاة الظهر</string>
     <string name="asr_khatm">ختام صلاة العصر</string>
