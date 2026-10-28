@@ -33,6 +33,7 @@ android {
         }
     }
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
@@ -83,6 +84,11 @@ dependencies {
 
     //Parser
     implementation(libs.gson)
+
+    //Prayer times + location
+    implementation(libs.adhan)
+    implementation(libs.play.services.location)
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
 
     //Logging
     implementation(libs.timber)

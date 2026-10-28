@@ -20,5 +20,16 @@ class SharedPreferencesManagerImp(
         }
     }
 
+    override suspend fun savePrayerSettings(settings: PrayerSettings) {
+        sharedPreferences.edit().putString(KEY_PRAYER_SETTINGS, gson.toJson(settings)).apply()
+    }
 
+    override suspend fun getPrayerSettings(): PrayerSettings {
+        val savedString = sharedPreferences.getString(KEY_PRAYER_SETTINGS, null)
+        return if (savedString.isNullOrEmpty().not()) {
+            gson.fromJson(savedString, PrayerSettings::class.java)
+        } else {
+            PrayerSettings()
+        }
+    }
 }
