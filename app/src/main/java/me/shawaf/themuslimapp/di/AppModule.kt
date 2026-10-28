@@ -17,6 +17,7 @@ import me.shawaf.themuslimapp.data.local.dp.DB_NAME
 import me.shawaf.themuslimapp.data.local.prefers.SharedPreferencesManager
 import me.shawaf.themuslimapp.data.local.prefers.SharedPreferencesManagerImp
 import me.shawaf.themuslimapp.utils.AzkarUtils
+import me.shawaf.themuslimapp.utils.DuaUtils
 import javax.inject.Singleton
 
 @Module
@@ -68,4 +69,8 @@ class AppModule {
     @Singleton
     @Provides
     fun provideAzkarUtils(applicationContext: Context) = AzkarUtils(applicationContext)
+
+    @Singleton
+    @Provides
+    fun provideDuaUtils(applicationContext: Context) = DuaUtils(applicationContext)
 }

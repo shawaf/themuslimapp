@@ -15,6 +15,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import me.shawaf.themuslimapp.features.counter.presentation.view.CounterScreen
 import me.shawaf.themuslimapp.features.counter.presentation.viewmodel.CounterViewModel
+import me.shawaf.themuslimapp.features.duas.presentation.DuasScreen
+import me.shawaf.themuslimapp.features.duas.presentation.viewmodel.DuasViewModel
 import me.shawaf.themuslimapp.features.history.presentation.HistoryScreen
 import me.shawaf.themuslimapp.features.history.presentation.HistoryViewModel
 import me.shawaf.themuslimapp.features.home.presentation.HomeScreen
@@ -58,7 +60,10 @@ fun TheMuslimApp(themeViewModel: ThemeViewModel) {
 
             composable(NoorRoutes.PRAYER) { ComingSoonScreen("Prayer Times & Azan") }
             composable(NoorRoutes.QIBLA) { ComingSoonScreen("Qibla Compass") }
-            composable(NoorRoutes.DUAS) { ComingSoonScreen("Duas & Azkar") }
+            composable(NoorRoutes.DUAS) {
+                val duasViewModel: DuasViewModel = hiltViewModel()
+                DuasScreen(duasViewModel = duasViewModel)
+            }
 
             composable(NoorRoutes.HADITH) {
                 ComingSoonScreen("Hadith Library", onBack = { navController.popBackStack() })
