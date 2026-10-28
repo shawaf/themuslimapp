@@ -2,6 +2,7 @@ package me.shawaf.themuslimapp.ui.components
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
@@ -33,6 +34,7 @@ fun AppScaffold(
     onNavigateToHistory: (() -> Unit)?,
     onToggleSoundEnabledState: (() -> Unit)?,
     onToggleVibrationEnabledState: (() -> Unit)?,
+    actions: @Composable RowScope.() -> Unit = {},
     content: @Composable () -> Unit,
 ) {
     Scaffold(topBar = {
@@ -48,7 +50,7 @@ fun AppScaffold(
                     )
                 }
             } else null
-        })
+        }, actions = actions)
     }, bottomBar = {
         if (withBottomBar) ActionBottomBar(
             configModel,

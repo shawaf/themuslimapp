@@ -26,6 +26,8 @@ import kotlinx.coroutines.launch
 import me.shawaf.themuslimapp.R
 import me.shawaf.themuslimapp.features.counter.presentation.viewmodel.CounterIntent
 import me.shawaf.themuslimapp.features.counter.presentation.viewmodel.CounterViewModel
+import me.shawaf.themuslimapp.ui.components.ActionButton
+import me.shawaf.themuslimapp.ui.components.ActionButtonWithState
 import me.shawaf.themuslimapp.ui.components.AppScaffold
 import me.shawaf.themuslimapp.ui.theme.Typography
 import me.shawaf.themuslimapp.utils.SoundUtils
@@ -47,12 +49,27 @@ fun CounterScreen(
     AppScaffold(LocalContext.current.getString(R.string.salat_khatm),
         configModel = counterViewState.configModel,
         onBackPressed = null,
-        withBottomBar = true,
+        withBottomBar = false,
         onSwitchTheme = onSwitchTheme,
         onNavigateToInfo = onNavigateToInfo,
         onNavigateToHistory = onNavigateToHistory,
         onToggleSoundEnabledState = { counterViewModel.handleIntent(CounterIntent.ToggleSoundState) },
-        onToggleVibrationEnabledState = { counterViewModel.handleIntent(CounterIntent.ToggleVibrationState) }) {
+        onToggleVibrationEnabledState = { counterViewModel.handleIntent(CounterIntent.ToggleVibrationState) },
+        actions = {
+            ActionButtonWithState(
+                iconSrc = R.drawable.ic_sound_on,
+                contentDesc = "Sound",
+                state = counterViewState.configModel.soundEnabled
+            ) { counterViewModel.handleIntent(CounterIntent.ToggleSoundState) }
+            ActionButtonWithState(
+                iconSrc = R.drawable.ic_vibration,
+                contentDesc = "Vibration",
+                state = counterViewState.configModel.vibrationEnabled
+            ) { counterViewModel.handleIntent(CounterIntent.ToggleVibrationState) }
+            ActionButton(iconSrc = R.drawable.ic_color_platte, contentDesc = "Color") { onSwitchTheme() }
+            ActionButton(iconSrc = R.drawable.ic_chart_bar, contentDesc = "History") { onNavigateToHistory() }
+            ActionButton(iconSrc = R.drawable.ic_info, contentDesc = "Info") { onNavigateToInfo() }
+        }) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween,
