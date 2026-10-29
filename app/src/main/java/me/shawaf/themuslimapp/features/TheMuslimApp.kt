@@ -19,6 +19,8 @@ import me.shawaf.themuslimapp.features.duas.presentation.DuasScreen
 import me.shawaf.themuslimapp.features.duas.presentation.viewmodel.DuasViewModel
 import me.shawaf.themuslimapp.features.prayer.presentation.PrayerScreen
 import me.shawaf.themuslimapp.features.prayer.presentation.viewmodel.PrayerViewModel
+import me.shawaf.themuslimapp.features.qibla.presentation.QiblaScreen
+import me.shawaf.themuslimapp.features.qibla.presentation.viewmodel.QiblaViewModel
 import me.shawaf.themuslimapp.features.history.presentation.HistoryScreen
 import me.shawaf.themuslimapp.features.history.presentation.HistoryViewModel
 import me.shawaf.themuslimapp.features.home.presentation.HomeScreen
@@ -64,7 +66,10 @@ fun TheMuslimApp(themeViewModel: ThemeViewModel) {
                 val prayerViewModel: PrayerViewModel = hiltViewModel()
                 PrayerScreen(prayerViewModel = prayerViewModel)
             }
-            composable(NoorRoutes.QIBLA) { ComingSoonScreen("Qibla Compass") }
+            composable(NoorRoutes.QIBLA) {
+                val qiblaViewModel: QiblaViewModel = hiltViewModel()
+                QiblaScreen(qiblaViewModel = qiblaViewModel)
+            }
             composable(NoorRoutes.DUAS) {
                 val duasViewModel: DuasViewModel = hiltViewModel()
                 DuasScreen(duasViewModel = duasViewModel)
