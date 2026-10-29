@@ -22,6 +22,7 @@ object NoorRoutes {
     const val CALENDAR = "calendar"
     const val HISTORY = "history"
     const val INFO = "info"
+    const val SETTINGS = "settings"
 }
 
 /** A tab shown in the bottom navigation bar. */

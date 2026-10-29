@@ -1,4 +1,5 @@
 package me.shawaf.themuslimapp.features.calendar.presentation
+import androidx.compose.material3.MaterialTheme
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -72,12 +73,12 @@ fun CalendarScreen(calendarViewModel: CalendarViewModel, onBack: () -> Unit) {
             Column(
                 modifier = Modifier.fillMaxWidth()
                     .shadow(6.dp, RoundedCornerShape(20.dp), clip = false)
-                    .clip(RoundedCornerShape(20.dp)).background(NoorColors.Surface)
+                    .clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.surface)
                     .padding(horizontal = 12.dp, vertical = 16.dp),
             ) {
                 Row(modifier = Modifier.fillMaxWidth()) {
                     listOf("S", "M", "T", "W", "T", "F", "S").forEach { d ->
-                        Text(d, color = NoorColors.Muted, fontSize = 11.sp, fontWeight = FontWeight.Bold,
+                        Text(d, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 11.sp, fontWeight = FontWeight.Bold,
                             textAlign = TextAlign.Center, modifier = Modifier.weight(1f))
                     }
                 }
@@ -93,7 +94,7 @@ fun CalendarScreen(calendarViewModel: CalendarViewModel, onBack: () -> Unit) {
         }
 
         Spacer(Modifier.height(20.dp))
-        Text("Upcoming events", color = NoorColors.Ink, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+        Text("Upcoming events", color = MaterialTheme.colorScheme.onBackground, fontSize = 15.sp, fontWeight = FontWeight.Bold)
         Spacer(Modifier.height(10.dp))
         Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
             state.events.forEachIndexed { index, event -> EventCard(event, highlight = index == 0) }
@@ -111,7 +112,7 @@ private fun DayCell(day: CalendarDay, modifier: Modifier = Modifier) {
                 contentAlignment = Alignment.Center,
             ) {
                 Text("${day.day}",
-                    color = if (day.isToday) Color.White else NoorColors.Ink,
+                    color = if (day.isToday) Color.White else MaterialTheme.colorScheme.onBackground,
                     fontSize = 13.sp,
                     fontWeight = if (day.isToday) FontWeight.Bold else FontWeight.Medium)
             }
@@ -127,7 +128,7 @@ private fun EventCard(event: IslamicEvent, highlight: Boolean) {
             .clip(RoundedCornerShape(18.dp))
             .background(
                 if (highlight) Brush.linearGradient(listOf(NoorColors.Emerald, NoorColors.EmeraldDark))
-                else Brush.linearGradient(listOf(NoorColors.Surface, NoorColors.Surface)),
+                else Brush.linearGradient(listOf(MaterialTheme.colorScheme.surface, MaterialTheme.colorScheme.surface)),
             )
             .padding(horizontal = 16.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -137,15 +138,15 @@ private fun EventCard(event: IslamicEvent, highlight: Boolean) {
                 color = if (highlight) NoorColors.GoldLight else NoorColors.Gold,
                 fontSize = 22.sp, fontWeight = FontWeight.ExtraBold)
             Text(event.gregMonthShort,
-                color = if (highlight) Color.White.copy(alpha = 0.7f) else NoorColors.Muted, fontSize = 10.sp)
+                color = if (highlight) Color.White.copy(alpha = 0.7f) else MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 10.sp)
         }
         Spacer(Modifier.size(14.dp))
         Column(modifier = Modifier.weight(1f)) {
             Text(event.nameEn,
-                color = if (highlight) Color.White else NoorColors.Ink,
+                color = if (highlight) Color.White else MaterialTheme.colorScheme.onBackground,
                 fontSize = 14.sp, fontWeight = FontWeight.Bold)
             Text(event.hijriLabel,
-                color = if (highlight) Color.White.copy(alpha = 0.7f) else NoorColors.Muted, fontSize = 11.5.sp)
+                color = if (highlight) Color.White.copy(alpha = 0.7f) else MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 11.5.sp)
         }
         Text(
             if (event.daysAway == 0) "Today" else "in ${event.daysAway}d",

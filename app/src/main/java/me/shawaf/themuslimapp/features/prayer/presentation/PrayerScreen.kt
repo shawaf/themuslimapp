@@ -1,4 +1,5 @@
 package me.shawaf.themuslimapp.features.prayer.presentation
+import androidx.compose.material3.MaterialTheme
 
 import android.Manifest
 import android.os.Build
@@ -67,12 +68,12 @@ fun PrayerScreen(prayerViewModel: PrayerViewModel) {
             .padding(horizontal = 20.dp).padding(top = 18.dp, bottom = 20.dp),
     ) {
         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Text("Prayer Times", color = NoorColors.Ink, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            Text("Prayer Times", color = MaterialTheme.colorScheme.onBackground, fontSize = 20.sp, fontWeight = FontWeight.Bold)
             Spacer(Modifier.weight(1f))
             Icon(Icons.Default.Place, null, tint = NoorColors.Gold, modifier = Modifier.size(15.dp))
             Spacer(Modifier.size(4.dp))
             Text(state.locationLabel + if (state.usingDefaultLocation) " · default" else "",
-                color = NoorColors.Muted, fontSize = 12.sp)
+                color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp)
         }
 
         Spacer(Modifier.height(16.dp))
@@ -107,7 +108,7 @@ fun PrayerScreen(prayerViewModel: PrayerViewModel) {
         }
 
         Spacer(Modifier.height(16.dp))
-        Text("Calculation: ${state.calcMethodLabel}", color = NoorColors.Muted, fontSize = 11.sp)
+        Text("Calculation: ${state.calcMethodLabel}", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 11.sp)
     }
 }
 
@@ -119,28 +120,28 @@ private fun PrayerRow(slot: PrayerSlotUi, onToggleAzan: () -> Unit) {
             .fillMaxWidth()
             .shadow(if (isNext) 8.dp else 4.dp, RoundedCornerShape(16.dp), clip = false)
             .clip(RoundedCornerShape(16.dp))
-            .background(if (isNext) NoorColors.SurfaceTint else NoorColors.Surface)
+            .background(if (isNext) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.surface)
             .padding(horizontal = 16.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Column {
-            Text(slot.nameEn, color = if (isNext) NoorColors.Emerald else NoorColors.Ink,
+            Text(slot.nameEn, color = if (isNext) NoorColors.Emerald else MaterialTheme.colorScheme.onBackground,
                 fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
-            Text(slot.nameAr, color = NoorColors.Muted, fontSize = 13.sp, fontFamily = AmiriFontFamily)
+            Text(slot.nameAr, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 13.sp, fontFamily = AmiriFontFamily)
         }
         Spacer(Modifier.weight(1f))
-        Text(slot.timeText, color = NoorColors.Ink, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+        Text(slot.timeText, color = MaterialTheme.colorScheme.onBackground, fontSize = 15.sp, fontWeight = FontWeight.Bold)
         if (slot.canAzan) {
             Spacer(Modifier.size(10.dp))
             Box(
                 modifier = Modifier.size(34.dp).clip(RoundedCornerShape(12.dp))
-                    .background(if (slot.azanOn) NoorColors.SurfaceTint else NoorColors.IvoryDim)
+                    .background(if (slot.azanOn) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.surfaceVariant)
                     .clickable(onClick = onToggleAzan),
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(Icons.Default.Notifications,
                     if (slot.azanOn) "Azan on" else "Azan off",
-                    tint = if (slot.azanOn) NoorColors.Gold else NoorColors.Muted,
+                    tint = if (slot.azanOn) NoorColors.Gold else MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.size(17.dp))
             }
         } else {

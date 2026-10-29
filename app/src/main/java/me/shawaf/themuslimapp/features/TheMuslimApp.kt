@@ -25,6 +25,8 @@ import me.shawaf.themuslimapp.features.hadith.presentation.HadithScreen
 import me.shawaf.themuslimapp.features.hadith.presentation.viewmodel.HadithViewModel
 import me.shawaf.themuslimapp.features.calendar.presentation.CalendarScreen
 import me.shawaf.themuslimapp.features.calendar.presentation.viewmodel.CalendarViewModel
+import me.shawaf.themuslimapp.features.settings.presentation.SettingsScreen
+import me.shawaf.themuslimapp.ui.viewmodel.ThemeViewModel
 import me.shawaf.themuslimapp.features.history.presentation.HistoryScreen
 import me.shawaf.themuslimapp.features.history.presentation.HistoryViewModel
 import me.shawaf.themuslimapp.features.home.presentation.HomeScreen
@@ -37,7 +39,7 @@ import me.shawaf.themuslimapp.ui.navigation.NoorRoutes
 import me.shawaf.themuslimapp.ui.navigation.bottomBarRoutes
 
 @Composable
-fun TheMuslimApp() {
+fun TheMuslimApp(themeViewModel: ThemeViewModel) {
     val navController: NavHostController = rememberNavController()
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
 
@@ -62,6 +64,7 @@ fun TheMuslimApp() {
                 HomeScreen(
                     homeViewModel = homeViewModel,
                     onNavigate = { route -> navController.navigateToTab(route) },
+                    onSettings = { navController.navigate(NoorRoutes.SETTINGS) },
                 )
             }
 
@@ -104,6 +107,10 @@ fun TheMuslimApp() {
             composable(NoorRoutes.INFO) {
                 val infoViewModel: InfoViewModel = hiltViewModel()
                 InfoScreen(viewModel = infoViewModel, onNavigateBack = { navController.popBackStack() })
+            }
+
+            composable(NoorRoutes.SETTINGS) {
+                SettingsScreen(themeViewModel = themeViewModel, onBack = { navController.popBackStack() })
             }
         }
     }

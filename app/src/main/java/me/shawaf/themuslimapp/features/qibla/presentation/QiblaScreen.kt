@@ -1,4 +1,5 @@
 package me.shawaf.themuslimapp.features.qibla.presentation
+import androidx.compose.material3.MaterialTheme
 
 import android.Manifest
 import android.content.Context
@@ -44,6 +45,18 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.MapProperties
+import com.google.maps.android.compose.MapType
+import com.google.maps.android.compose.MapUiSettings
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.MarkerState
+import com.google.maps.android.compose.rememberCameraPositionState
+import me.shawaf.themuslimapp.BuildConfig
 import me.shawaf.themuslimapp.features.qibla.presentation.viewmodel.QiblaIntent
 import me.shawaf.themuslimapp.features.qibla.presentation.viewmodel.QiblaViewModel
 import me.shawaf.themuslimapp.ui.theme.NoorColors
@@ -67,18 +80,19 @@ fun QiblaScreen(qiblaViewModel: QiblaViewModel) {
     val facingQibla = abs(relative) < 8f
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(horizontal = 20.dp).padding(top = 18.dp),
+        modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())
+            .padding(horizontal = 20.dp).padding(top = 18.dp, bottom = 20.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Text("Qibla Compass", color = NoorColors.Ink, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            Text("Qibla Compass", color = MaterialTheme.colorScheme.onBackground, fontSize = 20.sp, fontWeight = FontWeight.Bold)
             Spacer(Modifier.weight(1f))
             Text(state.locationLabel + if (state.usingDefaultLocation) " · default" else "",
-                color = NoorColors.Muted, fontSize = 12.sp)
+                color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp)
         }
 
         Spacer(Modifier.height(10.dp))
-        Text("Direction to Makkah", color = NoorColors.Muted, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+        Text("Direction to Makkah", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
         Text("${state.bearing.toInt()}°", color = NoorColors.Gold, fontSize = 30.sp, fontWeight = FontWeight.ExtraBold)
 
         Spacer(Modifier.height(18.dp))
@@ -87,10 +101,10 @@ fun QiblaScreen(qiblaViewModel: QiblaViewModel) {
 
         Text(
             text = if (facingQibla) "✓ You're facing the Qibla" else "Rotate until the arrow points up",
-            color = if (facingQibla) NoorColors.Surface else NoorColors.Emerald,
+            color = if (facingQibla) MaterialTheme.colorScheme.surface else NoorColors.Emerald,
             fontSize = 14.sp, fontWeight = FontWeight.Bold,
             modifier = Modifier.clip(RoundedCornerShape(22.dp))
-                .background(if (facingQibla) NoorColors.Success else NoorColors.SurfaceTint)
+                .background(if (facingQibla) NoorColors.Success else MaterialTheme.colorScheme.surfaceVariant)
                 .padding(horizontal = 18.dp, vertical = 9.dp),
         )
 
@@ -98,11 +112,39 @@ fun QiblaScreen(qiblaViewModel: QiblaViewModel) {
         Row(
             modifier = Modifier.fillMaxWidth()
                 .shadow(5.dp, RoundedCornerShape(18.dp), clip = false)
-                .clip(RoundedCornerShape(18.dp)).background(NoorColors.Surface).padding(16.dp),
+                .clip(RoundedCornerShape(18.dp)).background(MaterialTheme.colorScheme.surface).padding(16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             InfoCell("Distance", "${state.distanceKm} km")
             InfoCell("Qibla bearing", "${state.bearing.toInt()}° from N")
+        }
+
+        if (BuildConfig.MAPS_API_KEY.isNotBlank() && state.latitude != 0.0) {
+            Spacer(Modifier.height(16.dp))
+            QiblaMap(latitude = state.latitude, longitude = state.longitude)
+        }
+    }
+}
+
+@Composable
+private fun QiblaMap(latitude: Double, longitude: Double) {
+    val latLng = LatLng(latitude, longitude)
+    val cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(latLng, 15f)
+    }
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(200.dp)
+            .clip(RoundedCornerShape(18.dp)),
+    ) {
+        GoogleMap(
+            modifier = Modifier.fillMaxSize(),
+            cameraPositionState = cameraPositionState,
+            properties = MapProperties(mapType = MapType.HYBRID),
+            uiSettings = MapUiSettings(zoomControlsEnabled = false, compassEnabled = false),
+        ) {
+            Marker(state = MarkerState(position = latLng), title = "Your location")
         }
     }
 }
@@ -110,19 +152,20 @@ fun QiblaScreen(qiblaViewModel: QiblaViewModel) {
 @Composable
 private fun InfoCell(label: String, value: String) {
     Column {
-        Text(label, color = NoorColors.Muted, fontSize = 11.sp, fontWeight = FontWeight.SemiBold)
+        Text(label, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 11.sp, fontWeight = FontWeight.SemiBold)
         Spacer(Modifier.height(2.dp))
-        Text(value, color = NoorColors.Ink, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+        Text(value, color = MaterialTheme.colorScheme.onBackground, fontSize = 15.sp, fontWeight = FontWeight.Bold)
     }
 }
 
 @Composable
 private fun Compass(heading: Float, qiblaRelative: Float) {
     Box(modifier = Modifier.size(300.dp), contentAlignment = Alignment.Center) {
-        val ringColor = NoorColors.Muted.copy(alpha = 0.35f)
+        val ringColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.35f)
+        val dialFill = MaterialTheme.colorScheme.surfaceVariant
 
         Canvas(modifier = Modifier.fillMaxSize()) {
-            drawCircle(color = NoorColors.SurfaceTint, radius = size.minDimension / 2 - 2.dp.toPx())
+            drawCircle(color = dialFill, radius = size.minDimension / 2 - 2.dp.toPx())
             drawCircle(color = ringColor, radius = size.minDimension / 2 - 2.dp.toPx(), style = Stroke(width = 2.dp.toPx()))
         }
 
@@ -148,11 +191,11 @@ private fun Compass(heading: Float, qiblaRelative: Float) {
             }
             Text("N", color = NoorColors.Gold, fontSize = 16.sp, fontWeight = FontWeight.Bold,
                 modifier = Modifier.align(Alignment.TopCenter).padding(top = 26.dp))
-            Text("S", color = NoorColors.Muted, fontSize = 13.sp,
+            Text("S", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 13.sp,
                 modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 26.dp))
-            Text("E", color = NoorColors.Muted, fontSize = 13.sp,
+            Text("E", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 13.sp,
                 modifier = Modifier.align(Alignment.CenterEnd).padding(end = 28.dp))
-            Text("W", color = NoorColors.Muted, fontSize = 13.sp,
+            Text("W", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 13.sp,
                 modifier = Modifier.align(Alignment.CenterStart).padding(start = 28.dp))
         }
 

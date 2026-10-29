@@ -21,6 +21,13 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        // Google Maps key for the Qibla satellite map. Provide MAPS_API_KEY via
+        // gradle properties or env; the Qibla map only renders when it is set.
+        val mapsApiKey = (project.findProperty("MAPS_API_KEY") as String?)
+            ?: System.getenv("MAPS_API_KEY") ?: ""
+        manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
+        buildConfigField("String", "MAPS_API_KEY", "\"$mapsApiKey\"")
     }
 
     signingConfigs {
@@ -67,6 +74,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -114,6 +122,10 @@ dependencies {
     implementation(libs.adhan)
     implementation(libs.play.services.location)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
+
+    //Maps (Qibla satellite view)
+    implementation(libs.play.services.maps)
+    implementation(libs.maps.compose)
 
     //Logging
     implementation(libs.timber)

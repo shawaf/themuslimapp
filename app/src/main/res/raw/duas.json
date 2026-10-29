@@ -7,17 +7,17 @@
       "duas": [
         {
           "ar": "اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَٰهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ بِذَنْبِي فَاغْفِرْ لِي",
-          "en": "O Allah, You are my Lord, there is none worthy of worship but You. You created me and I am Your servant… I seek refuge in You from the evil I have done. Forgive me.",
+          "en": "O Allah, You are my Lord, there is none worthy of worship but You… I seek refuge in You from the evil I have done. Forgive me.",
           "translit": "Sayyid al-Istighfar",
           "count": 1,
           "reference": "Sahih al-Bukhari 6306"
         },
         {
           "ar": "بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ",
-          "en": "In the name of Allah, with whose name nothing in the earth or the heavens can cause harm, and He is the All-Hearing, the All-Knowing.",
+          "en": "In the name of Allah, with whose name nothing can cause harm, and He is the All-Hearing, the All-Knowing.",
           "translit": "Bismillahil-ladhi la yadurru…",
           "count": 3,
-          "reference": "Abu Dawud 5088, Tirmidhi 3388"
+          "reference": "Abu Dawud 5088"
         },
         {
           "ar": "رَضِيتُ بِاللَّهِ رَبًّا، وَبِالْإِسْلَامِ دِينًا، وَبِمُحَمَّدٍ ﷺ نَبِيًّا",
@@ -25,6 +25,13 @@
           "translit": "Raditu billahi Rabban…",
           "count": 3,
           "reference": "Abu Dawud 1529"
+        },
+        {
+          "ar": "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ",
+          "en": "Glory and praise be to Allah.",
+          "translit": "SubhanAllahi wa bihamdihi",
+          "count": 100,
+          "reference": "Sahih Muslim 2692"
         }
       ]
     },
@@ -42,17 +49,17 @@
         },
         {
           "ar": "اللَّهُمَّ بِكَ أَمْسَيْنَا، وَبِكَ أَصْبَحْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ الْمَصِيرُ",
-          "en": "O Allah, by You we enter the evening and by You we enter the morning, by You we live and by You we die, and to You is the return.",
+          "en": "O Allah, by You we enter the evening and the morning, by You we live and die, and to You is the return.",
           "translit": "Allahumma bika amsayna…",
           "count": 1,
           "reference": "Tirmidhi 3391"
         },
         {
-          "ar": "بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ",
-          "en": "In the name of Allah, with whose name nothing in the earth or the heavens can cause harm, and He is the All-Hearing, the All-Knowing.",
-          "translit": "Bismillahil-ladhi la yadurru…",
-          "count": 3,
-          "reference": "Abu Dawud 5088"
+          "ar": "أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ",
+          "en": "We have reached the evening and the dominion belongs to Allah, and all praise is for Allah.",
+          "translit": "Amsayna wa amsal-mulku lillah…",
+          "count": 1,
+          "reference": "Sahih Muslim 2723"
         }
       ]
     },
@@ -78,9 +85,16 @@
         {
           "ar": "سُبْحَانَ اللَّهِ، وَالْحَمْدُ لِلَّهِ، وَاللَّهُ أَكْبَرُ",
           "en": "Glory be to Allah, all praise is for Allah, and Allah is the Greatest (33 times each).",
-          "translit": "SubhanAllah, Alhamdulillah, Allahu Akbar",
+          "translit": "SubhanAllah · Alhamdulillah · Allahu Akbar",
           "count": 33,
           "reference": "Sahih Muslim 597"
+        },
+        {
+          "ar": "لَا إِلَٰهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
+          "en": "There is no deity but Allah alone, with no partner. His is the dominion and the praise, and He is able to do all things.",
+          "translit": "La ilaha illallahu wahdahu…",
+          "count": 1,
+          "reference": "Sahih al-Bukhari 844"
         }
       ]
     },
@@ -102,6 +116,118 @@
           "translit": "Allahumma qini 'adhabaka…",
           "count": 3,
           "reference": "Abu Dawud 5045"
+        },
+        {
+          "ar": "سُبْحَانَ اللَّهِ، وَالْحَمْدُ لِلَّهِ، وَاللَّهُ أَكْبَرُ",
+          "en": "Glory be to Allah (33), praise be to Allah (33), Allah is the Greatest (34) before sleeping.",
+          "translit": "Tasbih before sleep",
+          "count": 33,
+          "reference": "Sahih al-Bukhari 5362"
+        }
+      ]
+    },
+    {
+      "id": "waking",
+      "title_ar": "أذكار الاستيقاظ",
+      "title_en": "Waking Up",
+      "duas": [
+        {
+          "ar": "الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ",
+          "en": "All praise is for Allah who gave us life after death, and to Him is the resurrection.",
+          "translit": "Alhamdulillahil-ladhi ahyana…",
+          "count": 1,
+          "reference": "Sahih al-Bukhari 6312"
+        }
+      ]
+    },
+    {
+      "id": "food",
+      "title_ar": "أذكار الطعام",
+      "title_en": "Food",
+      "duas": [
+        {
+          "ar": "بِسْمِ اللَّهِ",
+          "en": "In the name of Allah (said before eating).",
+          "translit": "Bismillah",
+          "count": 1,
+          "reference": "Sahih al-Bukhari 5376"
+        },
+        {
+          "ar": "الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنِي هَٰذَا وَرَزَقَنِيهِ مِنْ غَيْرِ حَوْلٍ مِنِّي وَلَا قُوَّةٍ",
+          "en": "All praise is for Allah who fed me this and provided it for me without any might or power on my part.",
+          "translit": "Alhamdulillahil-ladhi at'amani…",
+          "count": 1,
+          "reference": "Tirmidhi 3458"
+        }
+      ]
+    },
+    {
+      "id": "home",
+      "title_ar": "أذكار المنزل",
+      "title_en": "Home",
+      "duas": [
+        {
+          "ar": "بِسْمِ اللَّهِ وَلَجْنَا، وَبِسْمِ اللَّهِ خَرَجْنَا، وَعَلَى اللَّهِ رَبِّنَا تَوَكَّلْنَا",
+          "en": "In the name of Allah we enter, in the name of Allah we leave, and upon Allah our Lord we rely.",
+          "translit": "Bismillahi walajna…",
+          "count": 1,
+          "reference": "Abu Dawud 5096"
+        },
+        {
+          "ar": "بِسْمِ اللَّهِ، تَوَكَّلْتُ عَلَى اللَّهِ، وَلَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ",
+          "en": "In the name of Allah, I place my trust in Allah, and there is no might nor power except with Allah (when leaving home).",
+          "translit": "Bismillah, tawakkaltu 'alallah…",
+          "count": 1,
+          "reference": "Abu Dawud 5095"
+        }
+      ]
+    },
+    {
+      "id": "distress",
+      "title_ar": "أدعية الكرب والهم",
+      "title_en": "Distress",
+      "duas": [
+        {
+          "ar": "لَا إِلَٰهَ إِلَّا اللَّهُ الْعَظِيمُ الْحَلِيمُ، لَا إِلَٰهَ إِلَّا اللَّهُ رَبُّ الْعَرْشِ الْعَظِيمِ",
+          "en": "There is no deity but Allah, the Mighty, the Forbearing; there is no deity but Allah, Lord of the Magnificent Throne.",
+          "translit": "La ilaha illallahul-'Azimul-Halim…",
+          "count": 1,
+          "reference": "Sahih al-Bukhari 6346"
+        },
+        {
+          "ar": "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ، وَالْعَجْزِ وَالْكَسَلِ",
+          "en": "O Allah, I seek refuge in You from anxiety and grief, from helplessness and laziness.",
+          "translit": "Allahumma inni a'udhu bika minal-hammi wal-hazan…",
+          "count": 1,
+          "reference": "Sahih al-Bukhari 6369"
+        },
+        {
+          "ar": "حَسْبُنَا اللَّهُ وَنِعْمَ الْوَكِيلُ",
+          "en": "Allah is sufficient for us, and He is the best disposer of affairs.",
+          "translit": "Hasbunallahu wa ni'mal-wakil",
+          "count": 1,
+          "reference": "Sahih al-Bukhari 4563"
+        }
+      ]
+    },
+    {
+      "id": "forgiveness",
+      "title_ar": "الاستغفار",
+      "title_en": "Forgiveness",
+      "duas": [
+        {
+          "ar": "رَبِّ اغْفِرْ لِي وَتُبْ عَلَيَّ إِنَّكَ أَنْتَ التَّوَّابُ الرَّحِيمُ",
+          "en": "My Lord, forgive me and accept my repentance; indeed You are the Accepting of repentance, the Merciful.",
+          "translit": "Rabbighfir li wa tub 'alayya…",
+          "count": 1,
+          "reference": "Abu Dawud 1516"
+        },
+        {
+          "ar": "أَسْتَغْفِرُ اللَّهَ الَّذِي لَا إِلَٰهَ إِلَّا هُوَ الْحَيَّ الْقَيُّومَ وَأَتُوبُ إِلَيْهِ",
+          "en": "I seek the forgiveness of Allah, there is no deity but Him, the Ever-Living, the Sustainer, and I repent to Him.",
+          "translit": "Astaghfirullahal-ladhi la ilaha illa huwa…",
+          "count": 1,
+          "reference": "Abu Dawud 1517"
         }
       ]
     },
@@ -114,6 +240,13 @@
           "ar": "سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَٰذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ وَإِنَّا إِلَىٰ رَبِّنَا لَمُنْقَلِبُونَ",
           "en": "Glory to Him who has subjected this to us, and we could never have accomplished it. And indeed, to our Lord we will return.",
           "translit": "Subhanal-ladhi sakh-khara lana hadha…",
+          "count": 1,
+          "reference": "Sahih Muslim 1342"
+        },
+        {
+          "ar": "اللَّهُمَّ إِنَّا نَسْأَلُكَ فِي سَفَرِنَا هَٰذَا الْبِرَّ وَالتَّقْوَى، وَمِنَ الْعَمَلِ مَا تَرْضَى",
+          "en": "O Allah, we ask You on this journey of ours righteousness, piety, and deeds that please You.",
+          "translit": "Allahumma inna nas'aluka fi safarina…",
           "count": 1,
           "reference": "Sahih Muslim 1342"
         }

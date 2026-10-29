@@ -1,5 +1,8 @@
 package me.shawaf.themuslimapp.features.home.presentation
+import androidx.compose.material3.MaterialTheme
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,9 +27,14 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -56,6 +64,7 @@ import kotlin.math.sin
 fun HomeScreen(
     homeViewModel: HomeViewModel,
     onNavigate: (String) -> Unit,
+    onSettings: () -> Unit,
 ) {
     val state by homeViewModel.viewState.collectAsState()
 
@@ -66,7 +75,7 @@ fun HomeScreen(
             .padding(horizontal = 20.dp)
             .padding(top = 18.dp, bottom = 24.dp),
     ) {
-        GreetingHeader(location = state.location, hijriDate = state.hijriDate)
+        GreetingHeader(location = state.location, hijriDate = state.hijriDate, onSettings = onSettings)
 
         Spacer(Modifier.height(16.dp))
 
@@ -84,7 +93,7 @@ fun HomeScreen(
 
         Spacer(Modifier.height(22.dp))
 
-        Text("Explore", color = NoorColors.Ink, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+        Text("Explore", color = MaterialTheme.colorScheme.onBackground, fontSize = 16.sp, fontWeight = FontWeight.Bold)
         Spacer(Modifier.height(12.dp))
         FeatureGrid(onNavigate)
 
@@ -95,15 +104,15 @@ fun HomeScreen(
 }
 
 @Composable
-private fun GreetingHeader(location: String, hijriDate: String) {
+private fun GreetingHeader(location: String, hijriDate: String, onSettings: () -> Unit) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Column {
-            Text("Assalamu Alaikum", color = NoorColors.Muted, fontSize = 13.sp)
-            Text("Peace be upon you", color = NoorColors.Ink, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+            Text("Assalamu Alaikum", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 13.sp)
+            Text("Peace be upon you", color = MaterialTheme.colorScheme.onBackground, fontSize = 18.sp, fontWeight = FontWeight.Bold)
             if (hijriDate.isNotEmpty()) {
                 Text(
                     hijriDate,
@@ -114,16 +123,29 @@ private fun GreetingHeader(location: String, hijriDate: String) {
                 )
             }
         }
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .clip(RoundedCornerShape(20.dp))
-                .background(NoorColors.SurfaceTint)
-                .padding(horizontal = 12.dp, vertical = 7.dp),
-        ) {
-            Icon(Icons.Default.Place, null, tint = NoorColors.Gold, modifier = Modifier.size(14.dp))
-            Spacer(Modifier.size(5.dp))
-            Text(location, color = NoorColors.Emerald, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                    .padding(horizontal = 12.dp, vertical = 7.dp),
+            ) {
+                Icon(Icons.Default.Place, null, tint = NoorColors.Gold, modifier = Modifier.size(14.dp))
+                Spacer(Modifier.size(5.dp))
+                Text(location, color = NoorColors.Emerald, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+            }
+            Spacer(Modifier.size(8.dp))
+            Box(
+                modifier = Modifier
+                    .size(36.dp)
+                    .clip(RoundedCornerShape(18.dp))
+                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                    .clickable(onClick = onSettings),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(Icons.Default.Settings, "Settings", tint = NoorColors.Emerald, modifier = Modifier.size(18.dp))
+            }
         }
     }
 }
@@ -140,6 +162,14 @@ private fun HeroCard(
     isAzanPlaying: Boolean,
     onToggleAzan: () -> Unit,
 ) {
+    var started by remember { mutableStateOf(false) }
+    val animProgress by animateFloatAsState(
+        targetValue = if (started) sunProgress else 0f,
+        animationSpec = tween(durationMillis = 1400),
+        label = "sunArc",
+    )
+    LaunchedEffect(sunProgress) { started = true }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -168,11 +198,11 @@ private fun HeroCard(
                 )
                 drawArc(
                     color = NoorColors.GoldLight,
-                    startAngle = 180f, sweepAngle = 180f * sunProgress.coerceIn(0f, 1f), useCenter = false,
+                    startAngle = 180f, sweepAngle = 180f * animProgress.coerceIn(0f, 1f), useCenter = false,
                     topLeft = topLeft, size = arcSize,
                     style = Stroke(2.5.dp.toPx(), cap = StrokeCap.Round),
                 )
-                val theta = PI * (1f + sunProgress.coerceIn(0f, 1f))
+                val theta = PI * (1f + animProgress.coerceIn(0f, 1f))
                 val sunX = cx + rx * cos(theta).toFloat()
                 val sunY = baseY + ry * sin(theta).toFloat()
                 drawCircle(Color(0xFFFFD572).copy(alpha = 0.3f), 12.dp.toPx(), androidx.compose.ui.geometry.Offset(sunX, sunY))
@@ -253,19 +283,19 @@ private fun FeatureGrid(onNavigate: (String) -> Unit) {
                             .weight(1f)
                             .shadow(6.dp, RoundedCornerShape(20.dp), clip = false)
                             .clip(RoundedCornerShape(20.dp))
-                            .background(NoorColors.Surface)
+                            .background(MaterialTheme.colorScheme.surface)
                             .clickable { onNavigate(tile.route) }
                             .padding(vertical = 15.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         Box(
-                            modifier = Modifier.size(42.dp).clip(RoundedCornerShape(14.dp)).background(NoorColors.SurfaceTint),
+                            modifier = Modifier.size(42.dp).clip(RoundedCornerShape(14.dp)).background(MaterialTheme.colorScheme.surfaceVariant),
                             contentAlignment = Alignment.Center,
                         ) {
                             Icon(tile.icon, tile.label, tint = NoorColors.Emerald, modifier = Modifier.size(20.dp))
                         }
                         Spacer(Modifier.height(8.dp))
-                        Text(tile.label, color = NoorColors.Ink, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+                        Text(tile.label, color = MaterialTheme.colorScheme.onBackground, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
                     }
                 }
             }

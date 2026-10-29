@@ -39,6 +39,8 @@ class QiblaViewModel @Inject constructor(
         return QiblaViewState(
             bearing = data.bearing.toFloat(),
             distanceKm = data.distanceKm.roundToInt(),
+            latitude = data.location.latitude,
+            longitude = data.location.longitude,
             locationLabel = label,
             usingDefaultLocation = data.usingDefaultLocation,
             isLoading = false,

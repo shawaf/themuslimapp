@@ -56,22 +56,26 @@ class HijriCalendarCalculator @Inject constructor() {
         return n.toString().map { if (it.isDigit()) ar[it - '0'] else it }.joinToString("")
     }
 
-    fun upcomingEvents(limit: Int = 4): List<IslamicEvent> {
+    fun upcomingEvents(limit: Int = 20): List<IslamicEvent> {
         val today = HijrahDate.now()
         val hYear = today.get(ChronoField.YEAR)
         val todayEpoch = today.toEpochDay()
 
-        // name, hijri month (1-based), hijri day
+        // name, hijri month (1-based), hijri day — a full year of notable days
         val defs = listOf(
             Triple("Islamic New Year", 1, 1),
             Triple("Day of Ashura", 1, 10),
             Triple("Mawlid an-Nabi", 3, 12),
             Triple("Isra & Mi'raj", 7, 27),
+            Triple("Mid-Sha'ban (Laylat al-Bara'ah)", 8, 15),
             Triple("First of Ramadan", 9, 1),
             Triple("Laylat al-Qadr", 9, 27),
             Triple("Eid al-Fitr", 10, 1),
+            Triple("First of Dhul-Hijjah", 12, 1),
+            Triple("Start of Hajj", 12, 8),
             Triple("Day of Arafah", 12, 9),
             Triple("Eid al-Adha", 12, 10),
+            Triple("Days of Tashreeq", 12, 11),
         )
 
         val events = mutableListOf<IslamicEvent>()

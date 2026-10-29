@@ -20,6 +20,10 @@
             android:theme="@style/Theme.KhatmSalat"
             android:name=".app.TheMuslimApplication"
             tools:targetApi="31">
+
+        <meta-data
+                android:name="com.google.android.geo.API_KEY"
+                android:value="${MAPS_API_KEY}" />
         <activity
                 android:name=".features.MainActivity"
                 android:exported="true"

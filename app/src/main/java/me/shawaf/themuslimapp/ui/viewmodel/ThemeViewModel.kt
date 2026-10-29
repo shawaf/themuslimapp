@@ -1,24 +1,34 @@
 package me.shawaf.themuslimapp.ui.viewmodel
 
-import androidx.compose.material3.ColorScheme
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import me.shawaf.themuslimapp.ui.theme.ColorThemes
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import me.shawaf.themuslimapp.data.local.prefers.SharedPreferencesManager
 import javax.inject.Inject
 
+/** Holds the app's theme mode ("system" | "light" | "dark"), persisted in prefs. */
 @HiltViewModel
-class ThemeViewModel @Inject constructor(): ViewModel() {
+class ThemeViewModel @Inject constructor(
+    private val prefs: SharedPreferencesManager,
+) : ViewModel() {
 
-    private val themeKeys = ColorThemes.keys.toList()
-    private var currentIndex = 0
+    private val _themeMode = MutableStateFlow("system")
+    val themeMode: StateFlow<String> = _themeMode
 
-    private val _currentTheme = mutableStateOf(ColorThemes[themeKeys[currentIndex]]!!)
-    val currentTheme: State<ColorScheme> = _currentTheme
+    init {
+        viewModelScope.launch {
+            _themeMode.value = prefs.getConfig().themeMode
+        }
+    }
 
-    fun switchToNextTheme() {
-        currentIndex = (currentIndex + 1) % themeKeys.size
-        _currentTheme.value = ColorThemes[themeKeys[currentIndex]]!!
+    fun setThemeMode(mode: String) {
+        viewModelScope.launch {
+            val updated = prefs.getConfig().copy(themeMode = mode)
+            prefs.saveConfig(updated)
+            _themeMode.value = mode
+        }
     }
 }

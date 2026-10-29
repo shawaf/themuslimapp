@@ -35,9 +35,9 @@ fun NoorBottomBar(
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = NoorColors.Emerald,
                     selectedTextColor = NoorColors.Emerald,
-                    indicatorColor = NoorColors.SurfaceTint,
-                    unselectedIconColor = NoorColors.Muted,
-                    unselectedTextColor = NoorColors.Muted,
+                    indicatorColor = MaterialTheme.colorScheme.surfaceVariant,
+                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 ),
             )
         }

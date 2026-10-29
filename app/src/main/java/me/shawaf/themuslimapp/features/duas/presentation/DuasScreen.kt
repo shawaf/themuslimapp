@@ -1,4 +1,5 @@
 package me.shawaf.themuslimapp.features.duas.presentation
+import androidx.compose.material3.MaterialTheme
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -50,7 +51,7 @@ fun DuasScreen(duasViewModel: DuasViewModel) {
     Column(
         modifier = Modifier.fillMaxSize().padding(horizontal = 20.dp).padding(top = 18.dp),
     ) {
-        Text("Duas & Azkar", color = NoorColors.Ink, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+        Text("Duas & Azkar", color = MaterialTheme.colorScheme.onBackground, fontSize = 20.sp, fontWeight = FontWeight.Bold)
         Spacer(Modifier.height(14.dp))
         SearchField(state.searchQuery) { duasViewModel.handleIntent(DuasIntent.Search(it)) }
         Spacer(Modifier.height(14.dp))
@@ -62,7 +63,7 @@ fun DuasScreen(duasViewModel: DuasViewModel) {
         val duas = state.visibleDuas
         if (!state.isLoading && duas.isEmpty()) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("No duas found", color = NoorColors.Muted, fontSize = 14.sp)
+                Text("No duas found", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp)
             }
         } else {
             LazyColumn(
@@ -82,21 +83,21 @@ private fun SearchField(query: String, onQueryChange: (String) -> Unit) {
             .fillMaxWidth()
             .shadow(5.dp, RoundedCornerShape(14.dp), clip = false)
             .clip(RoundedCornerShape(14.dp))
-            .background(NoorColors.Surface)
+            .background(MaterialTheme.colorScheme.surface)
             .padding(horizontal = 14.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Icon(Icons.Default.Search, null, tint = NoorColors.Muted, modifier = Modifier.size(18.dp))
+        Icon(Icons.Default.Search, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(18.dp))
         Spacer(Modifier.size(10.dp))
         Box(Modifier.fillMaxWidth()) {
             if (query.isEmpty()) {
-                Text("Search duas & azkar…", color = NoorColors.Muted, fontSize = 14.sp)
+                Text("Search duas & azkar…", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp)
             }
             BasicTextField(
                 value = query,
                 onValueChange = onQueryChange,
                 singleLine = true,
-                textStyle = TextStyle(color = NoorColors.Ink, fontSize = 14.sp),
+                textStyle = TextStyle(color = MaterialTheme.colorScheme.onBackground, fontSize = 14.sp),
                 cursorBrush = SolidColor(NoorColors.Gold),
                 modifier = Modifier.fillMaxWidth(),
             )
@@ -114,12 +115,12 @@ private fun CategoryChips(categories: List<DuaCategory>, selectedId: String, onS
             val selected = category.id == selectedId
             Text(
                 text = category.titleEn,
-                color = if (selected) NoorColors.Surface else NoorColors.Emerald,
+                color = if (selected) MaterialTheme.colorScheme.surface else NoorColors.Emerald,
                 fontSize = 12.sp,
                 fontWeight = if (selected) FontWeight.Bold else FontWeight.SemiBold,
                 modifier = Modifier
                     .clip(RoundedCornerShape(20.dp))
-                    .background(if (selected) NoorColors.Emerald else NoorColors.Surface)
+                    .background(if (selected) NoorColors.Emerald else MaterialTheme.colorScheme.surface)
                     .clickable { onSelect(category.id) }
                     .padding(horizontal = 15.dp, vertical = 8.dp),
             )
@@ -134,7 +135,7 @@ private fun DuaCard(dua: DuaItem) {
             .fillMaxWidth()
             .shadow(5.dp, RoundedCornerShape(18.dp), clip = false)
             .clip(RoundedCornerShape(18.dp))
-            .background(NoorColors.Surface)
+            .background(MaterialTheme.colorScheme.surface)
             .padding(16.dp),
     ) {
         Row(
@@ -148,7 +149,7 @@ private fun DuaCard(dua: DuaItem) {
                     color = NoorColors.Emerald,
                     fontSize = 11.sp,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.clip(RoundedCornerShape(12.dp)).background(NoorColors.SurfaceTint)
+                    modifier = Modifier.clip(RoundedCornerShape(12.dp)).background(MaterialTheme.colorScheme.surfaceVariant)
                         .padding(horizontal = 9.dp, vertical = 3.dp),
                 )
             } else {
@@ -161,7 +162,7 @@ private fun DuaCard(dua: DuaItem) {
         Spacer(Modifier.height(12.dp))
         Text(
             dua.ar,
-            color = NoorColors.Ink,
+            color = MaterialTheme.colorScheme.onBackground,
             fontSize = 21.sp,
             fontFamily = AmiriFontFamily,
             fontWeight = FontWeight.Bold,
@@ -170,7 +171,7 @@ private fun DuaCard(dua: DuaItem) {
             modifier = Modifier.fillMaxWidth(),
         )
         Spacer(Modifier.height(10.dp))
-        Text(dua.en, color = NoorColors.Muted, fontSize = 12.sp, lineHeight = 18.sp)
+        Text(dua.en, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp, lineHeight = 18.sp)
         if (dua.reference.isNotEmpty()) {
             Spacer(Modifier.height(8.dp))
             Text(dua.reference, color = NoorColors.Gold, fontSize = 11.sp, fontWeight = FontWeight.SemiBold)

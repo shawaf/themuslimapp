@@ -1,4 +1,5 @@
 package me.shawaf.themuslimapp.features.hadith.presentation
+import androidx.compose.material3.MaterialTheme
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -77,11 +78,11 @@ private fun CollectionChips(collections: List<HadithCollection>, selectedId: Str
             val selected = collection.id == selectedId
             Text(
                 text = collection.nameEn,
-                color = if (selected) NoorColors.Surface else NoorColors.Emerald,
+                color = if (selected) MaterialTheme.colorScheme.surface else NoorColors.Emerald,
                 fontSize = 12.sp,
                 fontWeight = if (selected) FontWeight.Bold else FontWeight.SemiBold,
                 modifier = Modifier.clip(RoundedCornerShape(20.dp))
-                    .background(if (selected) NoorColors.Emerald else NoorColors.Surface)
+                    .background(if (selected) NoorColors.Emerald else MaterialTheme.colorScheme.surface)
                     .clickable { onSelect(collection.id) }
                     .padding(horizontal = 15.dp, vertical = 8.dp),
             )
@@ -115,22 +116,22 @@ private fun HadithCard(hadith: HadithItem) {
     Column(
         modifier = Modifier.fillMaxWidth()
             .shadow(5.dp, RoundedCornerShape(18.dp), clip = false)
-            .clip(RoundedCornerShape(18.dp)).background(NoorColors.Surface).padding(16.dp),
+            .clip(RoundedCornerShape(18.dp)).background(MaterialTheme.colorScheme.surface).padding(16.dp),
     ) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             Text(hadith.narrator, color = NoorColors.Emerald, fontSize = 11.sp, fontWeight = FontWeight.Bold,
-                modifier = Modifier.clip(RoundedCornerShape(12.dp)).background(NoorColors.SurfaceTint)
+                modifier = Modifier.clip(RoundedCornerShape(12.dp)).background(MaterialTheme.colorScheme.surfaceVariant)
                     .padding(horizontal = 9.dp, vertical = 3.dp))
             if (hadith.grade.isNotEmpty()) {
                 Text(hadith.grade, color = NoorColors.Gold, fontSize = 11.sp, fontWeight = FontWeight.Bold)
             }
         }
         Spacer(Modifier.height(12.dp))
-        Text(hadith.ar, color = NoorColors.Ink, fontSize = 20.sp, fontFamily = AmiriFontFamily,
+        Text(hadith.ar, color = MaterialTheme.colorScheme.onBackground, fontSize = 20.sp, fontFamily = AmiriFontFamily,
             fontWeight = FontWeight.Bold, textAlign = TextAlign.End, lineHeight = 36.sp,
             modifier = Modifier.fillMaxWidth())
         Spacer(Modifier.height(10.dp))
-        Text(hadith.en, color = NoorColors.Muted, fontSize = 12.sp, lineHeight = 18.sp)
+        Text(hadith.en, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp, lineHeight = 18.sp)
         Spacer(Modifier.height(8.dp))
         Text(hadith.reference, color = NoorColors.Gold, fontSize = 11.sp, fontWeight = FontWeight.SemiBold)
     }

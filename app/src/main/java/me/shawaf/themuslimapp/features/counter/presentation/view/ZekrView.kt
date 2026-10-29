@@ -10,13 +10,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import me.shawaf.themuslimapp.data.local.dp.entity.ZekrEntity
 import me.shawaf.themuslimapp.data.local.model.ZekrModel
-import me.shawaf.themuslimapp.ui.theme.Typography
+import me.shawaf.themuslimapp.ui.theme.AmiriFontFamily
+import me.shawaf.themuslimapp.ui.theme.NoorColors
 import me.shawaf.themuslimapp.ui.theme.cardTextPadding
 
 @Composable
@@ -27,24 +26,24 @@ fun ZekrView(zekrModel: ZekrModel) {
             .background(MaterialTheme.colorScheme.surface)
             .padding(cardTextPadding),
         verticalArrangement = Arrangement.SpaceEvenly,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
             text = zekrModel.zekr,
             textAlign = TextAlign.Center,
-            style = Typography.titleMedium,
-            color = Color.White,
+            fontFamily = AmiriFontFamily,
+            fontWeight = FontWeight.Bold,
+            fontSize = 25.sp,
+            lineHeight = 42.sp,
+            color = MaterialTheme.colorScheme.onSurface,
             maxLines = 10,
         )
-
         Text(
-            text = " عدد المرات : ${zekrModel.count}",
-            textAlign = TextAlign.Left,
-            fontSize = 14.sp,
-            style = Typography.titleMedium,
-            color = MaterialTheme.colorScheme.secondary,
+            text = "عدد المرات : ${zekrModel.count}",
+            textAlign = TextAlign.Center,
+            fontFamily = AmiriFontFamily,
+            fontSize = 16.sp,
+            color = NoorColors.Gold,
         )
-
     }
-
 }
