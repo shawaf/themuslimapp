@@ -13,9 +13,9 @@ data class CalendarMonth(
 
 data class IslamicEvent(
     val nameEn: String,
-    val gregDay: Int,
-    val gregMonthShort: String,
-    val hijriLabel: String,
+    val description: String,
+    val hijriDay: Int,
+    val hijriMonthEn: String,
     /** Signed: negative = past, 0 = today, positive = upcoming. */
     val daysAway: Int,
     /** The nearest upcoming event of the year. */
