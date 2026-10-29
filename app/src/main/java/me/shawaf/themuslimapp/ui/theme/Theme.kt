@@ -1,19 +1,33 @@
 package me.shawaf.themuslimapp.ui.theme
 
-import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
+
+/** The single "Noor" light color scheme — no theme switching. */
+private val NoorColorScheme = lightColorScheme(
+    primary = NoorColors.Emerald,
+    onPrimary = Color.White,
+    secondary = NoorColors.Gold,
+    onSecondary = NoorColors.EmeraldDark,
+    background = NoorColors.Ivory,
+    onBackground = NoorColors.Ink,
+    surface = NoorColors.Surface,
+    onSurface = NoorColors.Ink,
+    surfaceVariant = NoorColors.SurfaceTint,
+    onSurfaceVariant = NoorColors.Muted,
+    outline = NoorColors.Line,
+)
 
 @Composable
 fun TheMuslimAppTheme(
-    darkTheme: Boolean = false,
-    colorScheme: ColorScheme = TealTheme,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     MaterialTheme(
-        colorScheme = colorScheme,
+        colorScheme = NoorColorScheme,
         typography = Typography,
+        shapes = Shapes,
         content = content,
-        shapes = Shapes
     )
 }

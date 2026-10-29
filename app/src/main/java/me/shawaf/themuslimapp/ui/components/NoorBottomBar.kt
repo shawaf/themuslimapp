@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import me.shawaf.themuslimapp.ui.navigation.bottomNavTabs
+import me.shawaf.themuslimapp.ui.theme.NoorColors
 
 /**
  * Global bottom navigation bar for the five primary destinations.
@@ -32,11 +33,11 @@ fun NoorBottomBar(
                 icon = { Icon(imageVector = tab.icon, contentDescription = tab.label) },
                 label = { Text(text = tab.label, style = MaterialTheme.typography.labelSmall) },
                 colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = MaterialTheme.colorScheme.primary,
-                    selectedTextColor = MaterialTheme.colorScheme.primary,
-                    indicatorColor = Color.Transparent,
-                    unselectedIconColor = Color.White.copy(alpha = 0.6f),
-                    unselectedTextColor = Color.White.copy(alpha = 0.6f),
+                    selectedIconColor = NoorColors.Emerald,
+                    selectedTextColor = NoorColors.Emerald,
+                    indicatorColor = NoorColors.SurfaceTint,
+                    unselectedIconColor = NoorColors.Muted,
+                    unselectedTextColor = NoorColors.Muted,
                 ),
             )
         }

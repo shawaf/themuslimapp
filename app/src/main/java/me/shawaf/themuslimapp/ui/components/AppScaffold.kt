@@ -19,6 +19,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import me.shawaf.themuslimapp.data.local.prefers.ConfigModel
+import me.shawaf.themuslimapp.ui.theme.AmiriFontFamily
+import me.shawaf.themuslimapp.ui.theme.NoorColors
 import me.shawaf.themuslimapp.ui.theme.Typography
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -40,8 +42,10 @@ fun AppScaffold(
     Scaffold(topBar = {
         CenterAlignedTopAppBar(colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
             containerColor = Color.Transparent,
-            titleContentColor = Color.White,
-        ), title = { Text(text = title, style = Typography.titleLarge) }, navigationIcon = {
+            titleContentColor = NoorColors.Emerald,
+        ), title = {
+            Text(text = title, style = Typography.titleLarge, fontFamily = AmiriFontFamily, color = NoorColors.Emerald)
+        }, navigationIcon = {
             if (onBackPressed != null) {
                 IconButton(onClick = onBackPressed) {
                     Icon(

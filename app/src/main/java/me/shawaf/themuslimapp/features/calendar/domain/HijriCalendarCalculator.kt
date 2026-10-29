@@ -1,0 +1,84 @@
+package me.shawaf.themuslimapp.features.calendar.domain
+
+import me.shawaf.themuslimapp.features.calendar.domain.model.CalendarDay
+import me.shawaf.themuslimapp.features.calendar.domain.model.CalendarMonth
+import me.shawaf.themuslimapp.features.calendar.domain.model.IslamicEvent
+import java.time.LocalDate
+import java.time.chrono.HijrahDate
+import java.time.format.TextStyle
+import java.time.temporal.ChronoField
+import java.util.Locale
+import javax.inject.Inject
+
+/** Produces the current Hijri month grid and upcoming Islamic events via java.time. */
+class HijriCalendarCalculator @Inject constructor() {
+
+    private val monthsEn = listOf(
+        "Muharram", "Safar", "Rabi al-Awwal", "Rabi al-Thani", "Jumada al-Awwal",
+        "Jumada al-Thani", "Rajab", "Sha'ban", "Ramadan", "Shawwal", "Dhul-Qa'dah", "Dhul-Hijjah",
+    )
+    private val monthsAr = listOf(
+        "مُحَرَّم", "صَفَر", "رَبِيع الأول", "رَبِيع الآخر", "جُمَادَى الأولى",
+        "جُمَادَى الآخرة", "رَجَب", "شَعْبَان", "رَمَضَان", "شَوَّال", "ذُو القَعْدَة", "ذُو الحِجَّة",
+    )
+
+    fun currentMonth(): CalendarMonth {
+        val today = HijrahDate.now()
+        val month = today.get(ChronoField.MONTH_OF_YEAR)
+        val year = today.get(ChronoField.YEAR)
+        val todayDay = today.get(ChronoField.DAY_OF_MONTH)
+        val first = today.with(ChronoField.DAY_OF_MONTH, 1L)
+        val leadingBlanks = first.get(ChronoField.DAY_OF_WEEK) % 7 // Sunday-first columns
+        val length = today.lengthOfMonth()
+
+        val days = buildList {
+            repeat(leadingBlanks) { add(CalendarDay(null, false)) }
+            for (d in 1..length) add(CalendarDay(d, d == todayDay))
+        }
+
+        val greg = LocalDate.ofEpochDay(today.toEpochDay())
+        val gregLabel = "${greg.month.getDisplayName(TextStyle.FULL, Locale.ENGLISH)} ${greg.year}"
+
+        return CalendarMonth(monthsEn[month - 1], monthsAr[month - 1], year, gregLabel, days)
+    }
+
+    fun upcomingEvents(limit: Int = 4): List<IslamicEvent> {
+        val today = HijrahDate.now()
+        val hYear = today.get(ChronoField.YEAR)
+        val todayEpoch = today.toEpochDay()
+
+        // name, hijri month (1-based), hijri day
+        val defs = listOf(
+            Triple("Islamic New Year", 1, 1),
+            Triple("Day of Ashura", 1, 10),
+            Triple("Mawlid an-Nabi", 3, 12),
+            Triple("Isra & Mi'raj", 7, 27),
+            Triple("First of Ramadan", 9, 1),
+            Triple("Laylat al-Qadr", 9, 27),
+            Triple("Eid al-Fitr", 10, 1),
+            Triple("Day of Arafah", 12, 9),
+            Triple("Eid al-Adha", 12, 10),
+        )
+
+        val events = mutableListOf<IslamicEvent>()
+        for (y in listOf(hYear, hYear + 1)) {
+            for ((name, m, d) in defs) {
+                val hd = runCatching { HijrahDate.of(y, m, d) }.getOrNull() ?: continue
+                val epoch = hd.toEpochDay()
+                if (epoch >= todayEpoch) {
+                    val greg = LocalDate.ofEpochDay(epoch)
+                    events.add(
+                        IslamicEvent(
+                            nameEn = name,
+                            gregDay = greg.dayOfMonth,
+                            gregMonthShort = greg.month.getDisplayName(TextStyle.SHORT, Locale.ENGLISH),
+                            hijriLabel = "$d ${monthsEn[m - 1]}",
+                            daysAway = (epoch - todayEpoch).toInt(),
+                        ),
+                    )
+                }
+            }
+        }
+        return events.sortedBy { it.daysAway }.take(limit)
+    }
+}

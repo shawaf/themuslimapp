@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -35,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
@@ -44,10 +44,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import me.shawaf.themuslimapp.features.qibla.presentation.viewmodel.QiblaIntent
 import me.shawaf.themuslimapp.features.qibla.presentation.viewmodel.QiblaViewModel
+import me.shawaf.themuslimapp.ui.theme.NoorColors
 import kotlin.math.abs
-
-private val Gold = Color(0xFFE7CE9A)
 
 @Composable
 fun QiblaScreen(qiblaViewModel: QiblaViewModel) {
@@ -56,85 +56,49 @@ fun QiblaScreen(qiblaViewModel: QiblaViewModel) {
 
     val permissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions(),
-    ) {
-        qiblaViewModel.handleIntent(
-            me.shawaf.themuslimapp.features.qibla.presentation.viewmodel.QiblaIntent.Load,
-        )
-    }
+    ) { qiblaViewModel.handleIntent(QiblaIntent.Load) }
     LaunchedEffect(Unit) {
         permissionLauncher.launch(
-            arrayOf(
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-            ),
+            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
         )
     }
 
-    // Angle of the Qibla relative to where the device currently points.
     val relative = normalizeAngle(state.bearing - heading)
     val facingQibla = abs(relative) < 8f
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 20.dp)
-            .padding(top = 16.dp),
+        modifier = Modifier.fillMaxSize().padding(horizontal = 20.dp).padding(top = 18.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        // Header
         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Text("Qibla Compass", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            Text("Qibla Compass", color = NoorColors.Ink, fontSize = 20.sp, fontWeight = FontWeight.Bold)
             Spacer(Modifier.weight(1f))
-            Text(
-                state.locationLabel + if (state.usingDefaultLocation) " · default" else "",
-                color = Color.White.copy(alpha = 0.7f),
-                fontSize = 12.sp,
-            )
+            Text(state.locationLabel + if (state.usingDefaultLocation) " · default" else "",
+                color = NoorColors.Muted, fontSize = 12.sp)
         }
 
         Spacer(Modifier.height(10.dp))
-        Text(
-            "Direction to Makkah",
-            color = Color.White.copy(alpha = 0.6f),
-            fontSize = 12.sp,
-            fontWeight = FontWeight.SemiBold,
-        )
-        Text(
-            "${state.bearing.toInt()}°",
-            color = Gold,
-            fontSize = 30.sp,
-            fontWeight = FontWeight.ExtraBold,
-        )
+        Text("Direction to Makkah", color = NoorColors.Muted, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+        Text("${state.bearing.toInt()}°", color = NoorColors.Gold, fontSize = 30.sp, fontWeight = FontWeight.ExtraBold)
 
         Spacer(Modifier.height(18.dp))
-
         Compass(heading = heading, qiblaRelative = relative)
-
         Spacer(Modifier.height(20.dp))
 
-        // Facing indicator
         Text(
             text = if (facingQibla) "✓ You're facing the Qibla" else "Rotate until the arrow points up",
-            color = if (facingQibla) Color(0xFF8FE0B0) else Color.White.copy(alpha = 0.7f),
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier
-                .clip(RoundedCornerShape(22.dp))
-                .background(
-                    if (facingQibla) Color(0xFF123D30) else MaterialTheme.colorScheme.surface.copy(alpha = 0.6f),
-                )
+            color = if (facingQibla) NoorColors.Surface else NoorColors.Emerald,
+            fontSize = 14.sp, fontWeight = FontWeight.Bold,
+            modifier = Modifier.clip(RoundedCornerShape(22.dp))
+                .background(if (facingQibla) NoorColors.Success else NoorColors.SurfaceTint)
                 .padding(horizontal = 18.dp, vertical = 9.dp),
         )
 
         Spacer(Modifier.height(18.dp))
-
-        // Info card
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(18.dp))
-                .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.85f))
-                .padding(16.dp),
+            modifier = Modifier.fillMaxWidth()
+                .shadow(5.dp, RoundedCornerShape(18.dp), clip = false)
+                .clip(RoundedCornerShape(18.dp)).background(NoorColors.Surface).padding(16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             InfoCell("Distance", "${state.distanceKm} km")
@@ -146,33 +110,23 @@ fun QiblaScreen(qiblaViewModel: QiblaViewModel) {
 @Composable
 private fun InfoCell(label: String, value: String) {
     Column {
-        Text(label, color = Color.White.copy(alpha = 0.55f), fontSize = 11.sp, fontWeight = FontWeight.SemiBold)
+        Text(label, color = NoorColors.Muted, fontSize = 11.sp, fontWeight = FontWeight.SemiBold)
         Spacer(Modifier.height(2.dp))
-        Text(value, color = Color.White, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+        Text(value, color = NoorColors.Ink, fontSize = 15.sp, fontWeight = FontWeight.Bold)
     }
 }
 
 @Composable
 private fun Compass(heading: Float, qiblaRelative: Float) {
-    Box(
-        modifier = Modifier.size(300.dp),
-        contentAlignment = Alignment.Center,
-    ) {
-        val ringColor = Color.White.copy(alpha = 0.3f)
+    Box(modifier = Modifier.size(300.dp), contentAlignment = Alignment.Center) {
+        val ringColor = NoorColors.Muted.copy(alpha = 0.35f)
 
-        // Static outer ring
         Canvas(modifier = Modifier.fillMaxSize()) {
-            drawCircle(
-                color = ringColor,
-                radius = size.minDimension / 2 - 2.dp.toPx(),
-                style = Stroke(width = 2.dp.toPx()),
-            )
+            drawCircle(color = NoorColors.SurfaceTint, radius = size.minDimension / 2 - 2.dp.toPx())
+            drawCircle(color = ringColor, radius = size.minDimension / 2 - 2.dp.toPx(), style = Stroke(width = 2.dp.toPx()))
         }
 
-        // Rotating cardinal ring (ticks + N/E/S/W), aligned to real north.
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .rotate(-heading)) {
+        Box(modifier = Modifier.fillMaxSize().rotate(-heading)) {
             Canvas(modifier = Modifier.fillMaxSize()) {
                 val cx = size.width / 2
                 val cy = size.height / 2
@@ -181,82 +135,55 @@ private fun Compass(heading: Float, qiblaRelative: Float) {
                     val angle = Math.toRadians((i * 5).toDouble())
                     val isMajor = i % 9 == 0
                     val len = if (isMajor) 16.dp.toPx() else 7.dp.toPx()
-                    val sx = cx + (outer) * Math.sin(angle).toFloat()
-                    val sy = cy - (outer) * Math.cos(angle).toFloat()
+                    val sx = cx + outer * Math.sin(angle).toFloat()
+                    val sy = cy - outer * Math.cos(angle).toFloat()
                     val ex = cx + (outer - len) * Math.sin(angle).toFloat()
                     val ey = cy - (outer - len) * Math.cos(angle).toFloat()
                     drawLine(
-                        color = if (i == 0) Gold else ringColor,
-                        start = Offset(sx, sy),
-                        end = Offset(ex, ey),
-                        strokeWidth = if (isMajor) 2.5.dp.toPx() else 1.dp.toPx(),
-                        cap = StrokeCap.Round,
+                        color = if (i == 0) NoorColors.Gold else ringColor,
+                        start = Offset(sx, sy), end = Offset(ex, ey),
+                        strokeWidth = if (isMajor) 2.5.dp.toPx() else 1.dp.toPx(), cap = StrokeCap.Round,
                     )
                 }
             }
-            Text("N", color = Gold, fontSize = 16.sp, fontWeight = FontWeight.Bold,
+            Text("N", color = NoorColors.Gold, fontSize = 16.sp, fontWeight = FontWeight.Bold,
                 modifier = Modifier.align(Alignment.TopCenter).padding(top = 26.dp))
-            Text("S", color = Color.White.copy(alpha = 0.7f), fontSize = 13.sp,
+            Text("S", color = NoorColors.Muted, fontSize = 13.sp,
                 modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 26.dp))
-            Text("E", color = Color.White.copy(alpha = 0.7f), fontSize = 13.sp,
+            Text("E", color = NoorColors.Muted, fontSize = 13.sp,
                 modifier = Modifier.align(Alignment.CenterEnd).padding(end = 28.dp))
-            Text("W", color = Color.White.copy(alpha = 0.7f), fontSize = 13.sp,
+            Text("W", color = NoorColors.Muted, fontSize = 13.sp,
                 modifier = Modifier.align(Alignment.CenterStart).padding(start = 28.dp))
         }
 
-        // Qibla pointer (rotates to the Qibla relative to the device)
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .rotate(qiblaRelative)) {
+        Box(modifier = Modifier.fillMaxSize().rotate(qiblaRelative)) {
             Canvas(modifier = Modifier.fillMaxSize()) {
                 val cx = size.width / 2
                 val cy = size.height / 2
                 val tipY = size.height * 0.14f
-                drawLine(
-                    color = Gold,
-                    start = Offset(cx, cy),
-                    end = Offset(cx, tipY + 10.dp.toPx()),
-                    strokeWidth = 4.dp.toPx(),
-                    cap = StrokeCap.Round,
-                )
+                drawLine(NoorColors.Gold, Offset(cx, cy), Offset(cx, tipY + 10.dp.toPx()),
+                    strokeWidth = 4.dp.toPx(), cap = StrokeCap.Round)
                 val head = Path().apply {
                     moveTo(cx, tipY)
                     lineTo(cx - 10.dp.toPx(), tipY + 18.dp.toPx())
                     lineTo(cx + 10.dp.toPx(), tipY + 18.dp.toPx())
                     close()
                 }
-                drawPath(head, Gold)
+                drawPath(head, NoorColors.Gold)
             }
-            // Kaaba marker at the tip
             Box(
-                modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    .padding(top = 30.dp)
-                    .size(22.dp)
-                    .clip(RoundedCornerShape(6.dp))
-                    .background(Color(0xFF16231E)),
+                modifier = Modifier.align(Alignment.TopCenter).padding(top = 30.dp).size(22.dp)
+                    .clip(RoundedCornerShape(6.dp)).background(NoorColors.EmeraldDark),
                 contentAlignment = Alignment.Center,
             ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(3.dp)
-                        .background(Gold),
-                )
+                Box(modifier = Modifier.fillMaxWidth().height(3.dp).background(NoorColors.GoldLight))
             }
         }
 
-        // Centre hub
-        Box(
-            modifier = Modifier
-                .size(16.dp)
-                .clip(RoundedCornerShape(8.dp))
-                .background(Gold),
-        )
+        Box(modifier = Modifier.size(16.dp).clip(RoundedCornerShape(8.dp)).background(NoorColors.Gold))
     }
 }
 
-/** Registers the rotation-vector sensor and returns a smoothed azimuth (degrees from north). */
 @Composable
 private fun rememberDeviceHeading(): Float {
     val context = LocalContext.current
@@ -269,30 +196,24 @@ private fun rememberDeviceHeading(): Float {
         val listener = object : SensorEventListener {
             private val rotationMatrix = FloatArray(9)
             private val orientation = FloatArray(3)
-
             override fun onSensorChanged(event: SensorEvent) {
                 SensorManager.getRotationMatrixFromVector(rotationMatrix, event.values)
                 SensorManager.getOrientation(rotationMatrix, orientation)
                 var azimuth = Math.toDegrees(orientation[0].toDouble()).toFloat()
                 if (azimuth < 0) azimuth += 360f
-                // Low-pass smoothing along the shortest angular path.
                 val delta = normalizeAngle(azimuth - heading)
                 heading = (heading + delta * 0.15f + 360f) % 360f
             }
-
             override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
         }
-
         if (rotationSensor != null) {
             sensorManager.registerListener(listener, rotationSensor, SensorManager.SENSOR_DELAY_UI)
         }
         onDispose { sensorManager.unregisterListener(listener) }
     }
-
     return heading
 }
 
-/** Normalises an angle in degrees to the range (-180, 180]. */
 private fun normalizeAngle(angle: Float): Float {
     var a = angle % 360f
     if (a > 180f) a -= 360f

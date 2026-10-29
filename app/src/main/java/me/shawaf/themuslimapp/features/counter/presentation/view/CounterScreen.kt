@@ -37,7 +37,6 @@ import me.shawaf.themuslimapp.utils.VibrationUtils
 @Composable
 fun CounterScreen(
     counterViewModel: CounterViewModel,
-    onSwitchTheme: () -> Unit,
     onNavigateToHistory: () -> Unit,
     onNavigateToInfo: () -> Unit
 ) {
@@ -50,7 +49,7 @@ fun CounterScreen(
         configModel = counterViewState.configModel,
         onBackPressed = null,
         withBottomBar = false,
-        onSwitchTheme = onSwitchTheme,
+        onSwitchTheme = null,
         onNavigateToInfo = onNavigateToInfo,
         onNavigateToHistory = onNavigateToHistory,
         onToggleSoundEnabledState = { counterViewModel.handleIntent(CounterIntent.ToggleSoundState) },
@@ -66,7 +65,6 @@ fun CounterScreen(
                 contentDesc = "Vibration",
                 state = counterViewState.configModel.vibrationEnabled
             ) { counterViewModel.handleIntent(CounterIntent.ToggleVibrationState) }
-            ActionButton(iconSrc = R.drawable.ic_color_platte, contentDesc = "Color") { onSwitchTheme() }
             ActionButton(iconSrc = R.drawable.ic_chart_bar, contentDesc = "History") { onNavigateToHistory() }
             ActionButton(iconSrc = R.drawable.ic_info, contentDesc = "Info") { onNavigateToInfo() }
         }) {

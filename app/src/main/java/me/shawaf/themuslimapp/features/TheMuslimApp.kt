@@ -21,6 +21,10 @@ import me.shawaf.themuslimapp.features.prayer.presentation.PrayerScreen
 import me.shawaf.themuslimapp.features.prayer.presentation.viewmodel.PrayerViewModel
 import me.shawaf.themuslimapp.features.qibla.presentation.QiblaScreen
 import me.shawaf.themuslimapp.features.qibla.presentation.viewmodel.QiblaViewModel
+import me.shawaf.themuslimapp.features.hadith.presentation.HadithScreen
+import me.shawaf.themuslimapp.features.hadith.presentation.viewmodel.HadithViewModel
+import me.shawaf.themuslimapp.features.calendar.presentation.CalendarScreen
+import me.shawaf.themuslimapp.features.calendar.presentation.viewmodel.CalendarViewModel
 import me.shawaf.themuslimapp.features.history.presentation.HistoryScreen
 import me.shawaf.themuslimapp.features.history.presentation.HistoryViewModel
 import me.shawaf.themuslimapp.features.home.presentation.HomeScreen
@@ -31,10 +35,9 @@ import me.shawaf.themuslimapp.ui.components.ComingSoonScreen
 import me.shawaf.themuslimapp.ui.components.NoorBottomBar
 import me.shawaf.themuslimapp.ui.navigation.NoorRoutes
 import me.shawaf.themuslimapp.ui.navigation.bottomBarRoutes
-import me.shawaf.themuslimapp.ui.viewmodel.ThemeViewModel
 
 @Composable
-fun TheMuslimApp(themeViewModel: ThemeViewModel) {
+fun TheMuslimApp() {
     val navController: NavHostController = rememberNavController()
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
 
@@ -76,17 +79,18 @@ fun TheMuslimApp(themeViewModel: ThemeViewModel) {
             }
 
             composable(NoorRoutes.HADITH) {
-                ComingSoonScreen("Hadith Library", onBack = { navController.popBackStack() })
+                val hadithViewModel: HadithViewModel = hiltViewModel()
+                HadithScreen(hadithViewModel = hadithViewModel, onBack = { navController.popBackStack() })
             }
             composable(NoorRoutes.CALENDAR) {
-                ComingSoonScreen("Islamic Calendar", onBack = { navController.popBackStack() })
+                val calendarViewModel: CalendarViewModel = hiltViewModel()
+                CalendarScreen(calendarViewModel = calendarViewModel, onBack = { navController.popBackStack() })
             }
 
             composable(NoorRoutes.SEBHA) {
                 val counterViewModel: CounterViewModel = hiltViewModel()
                 CounterScreen(
                     counterViewModel = counterViewModel,
-                    onSwitchTheme = { themeViewModel.switchToNextTheme() },
                     onNavigateToHistory = { navController.navigate(NoorRoutes.HISTORY) },
                     onNavigateToInfo = { navController.navigate(NoorRoutes.INFO) },
                 )

@@ -8,45 +8,52 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import me.shawaf.themuslimapp.R
 
-val CustomFontFamily = FontFamily(
+/** Amiri — used only for Arabic text (ayat, duas, hadith, dhikr). */
+val AmiriFontFamily = FontFamily(
     Font(R.font.amiri_regular, FontWeight.Normal),
     Font(R.font.amiri_bold, FontWeight.Bold),
-    Font(R.font.amiri_italic, FontWeight.Thin)
 )
 
-// Set of Material typography styles to start with
+/** Clean sans used for all Latin / UI text. */
+private val UiFontFamily = FontFamily.Default
+
+/** A ready-made style for Arabic content. */
+val ArabicTextStyle = TextStyle(
+    fontFamily = AmiriFontFamily,
+    fontWeight = FontWeight.Normal,
+    lineHeight = 34.sp,
+)
+
 val Typography = Typography(
     displayLarge = TextStyle(
-        fontFamily = CustomFontFamily,
-        fontWeight = FontWeight.Bold,
-        fontSize = 60.sp,
-        lineHeight = 70.sp,
-        letterSpacing = 0.sp
+        fontFamily = UiFontFamily,
+        fontWeight = FontWeight.ExtraBold,
+        fontSize = 56.sp,
+        lineHeight = 62.sp,
     ),
     titleLarge = TextStyle(
-        fontFamily = CustomFontFamily,
+        fontFamily = UiFontFamily,
         fontWeight = FontWeight.Bold,
-        fontSize = 24.sp,
-        lineHeight = 28.sp,
-        letterSpacing = 0.sp
-    ), titleMedium = TextStyle(
-        fontFamily = CustomFontFamily,
-        fontWeight = FontWeight.Normal,
         fontSize = 20.sp,
-        lineHeight = 28.sp,
-        letterSpacing = 0.sp
-    ), labelSmall = TextStyle(
-        fontFamily = CustomFontFamily,
+        lineHeight = 26.sp,
+    ),
+    titleMedium = TextStyle(
+        fontFamily = UiFontFamily,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 16.sp,
+        lineHeight = 22.sp,
+    ),
+    bodyLarge = TextStyle(
+        fontFamily = UiFontFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 15.sp,
+        lineHeight = 22.sp,
+    ),
+    labelSmall = TextStyle(
+        fontFamily = UiFontFamily,
         fontWeight = FontWeight.Medium,
         fontSize = 11.sp,
         lineHeight = 16.sp,
-        letterSpacing = 0.5.sp
-    ), bodyLarge = TextStyle(
-        fontFamily = CustomFontFamily,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.5.sp
-    )
+        letterSpacing = 0.5.sp,
+    ),
 )
-

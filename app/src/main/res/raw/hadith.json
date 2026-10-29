@@ -1,0 +1,88 @@
+{
+  "collections": [
+    {
+      "id": "bukhari",
+      "name_en": "Sahih al-Bukhari",
+      "name_ar": "صحيح البخاري",
+      "hadiths": [
+        {
+          "ar": "إِنَّمَا الْأَعْمَالُ بِالنِّيَّاتِ، وَإِنَّمَا لِكُلِّ امْرِئٍ مَا نَوَى",
+          "en": "Actions are judged only by intentions, and every person will have only what they intended.",
+          "narrator": "Umar ibn al-Khattab",
+          "reference": "Bukhari 1",
+          "grade": "Sahih"
+        },
+        {
+          "ar": "لَا يُؤْمِنُ أَحَدُكُمْ حَتَّى يُحِبَّ لِأَخِيهِ مَا يُحِبُّ لِنَفْسِهِ",
+          "en": "None of you truly believes until he loves for his brother what he loves for himself.",
+          "narrator": "Anas ibn Malik",
+          "reference": "Bukhari 13",
+          "grade": "Sahih"
+        },
+        {
+          "ar": "الْمُسْلِمُ مَنْ سَلِمَ الْمُسْلِمُونَ مِنْ لِسَانِهِ وَيَدِهِ",
+          "en": "The Muslim is the one from whose tongue and hand the Muslims are safe.",
+          "narrator": "Abdullah ibn Amr",
+          "reference": "Bukhari 10",
+          "grade": "Sahih"
+        }
+      ]
+    },
+    {
+      "id": "muslim",
+      "name_en": "Sahih Muslim",
+      "name_ar": "صحيح مسلم",
+      "hadiths": [
+        {
+          "ar": "الطُّهُورُ شَطْرُ الْإِيمَانِ",
+          "en": "Cleanliness is half of faith.",
+          "narrator": "Abu Malik al-Ash'ari",
+          "reference": "Muslim 223",
+          "grade": "Sahih"
+        },
+        {
+          "ar": "مَنْ كَانَ يُؤْمِنُ بِاللَّهِ وَالْيَوْمِ الْآخِرِ فَلْيَقُلْ خَيْرًا أَوْ لِيَصْمُتْ",
+          "en": "Whoever believes in Allah and the Last Day, let him speak good or remain silent.",
+          "narrator": "Abu Hurayrah",
+          "reference": "Muslim 47",
+          "grade": "Sahih"
+        },
+        {
+          "ar": "الدِّينُ النَّصِيحَةُ",
+          "en": "The religion is sincerity (naseehah).",
+          "narrator": "Tamim al-Dari",
+          "reference": "Muslim 55",
+          "grade": "Sahih"
+        }
+      ]
+    },
+    {
+      "id": "riyad",
+      "name_en": "Riyad as-Salihin",
+      "name_ar": "رياض الصالحين",
+      "hadiths": [
+        {
+          "ar": "اتَّقِ اللَّهَ حَيْثُمَا كُنْتَ، وَأَتْبِعِ السَّيِّئَةَ الْحَسَنَةَ تَمْحُهَا، وَخَالِقِ النَّاسَ بِخُلُقٍ حَسَنٍ",
+          "en": "Fear Allah wherever you are; follow a bad deed with a good one to erase it; and treat people with good character.",
+          "narrator": "Abu Dharr",
+          "reference": "Riyad as-Salihin 61",
+          "grade": "Hasan"
+        },
+        {
+          "ar": "لَا تَغْضَبْ",
+          "en": "Do not become angry.",
+          "narrator": "Abu Hurayrah",
+          "reference": "Riyad as-Salihin 45",
+          "grade": "Sahih"
+        },
+        {
+          "ar": "تَبَسُّمُكَ فِي وَجْهِ أَخِيكَ لَكَ صَدَقَةٌ",
+          "en": "Smiling in the face of your brother is charity.",
+          "narrator": "Abu Dharr",
+          "reference": "Riyad as-Salihin 126",
+          "grade": "Hasan"
+        }
+      ]
+    }
+  ]
+}
