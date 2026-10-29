@@ -42,6 +42,20 @@ class HijriCalendarCalculator @Inject constructor() {
         return CalendarMonth(monthsEn[month - 1], monthsAr[month - 1], year, gregLabel, days)
     }
 
+    /** Today's Hijri date as Arabic text, e.g. "١٤ شوال ١٤٤٧". */
+    fun hijriTodayArabic(): String {
+        val today = HijrahDate.now()
+        val d = today.get(ChronoField.DAY_OF_MONTH)
+        val m = today.get(ChronoField.MONTH_OF_YEAR)
+        val y = today.get(ChronoField.YEAR)
+        return "${toArabicDigits(d)} ${monthsAr[m - 1]} ${toArabicDigits(y)}"
+    }
+
+    private fun toArabicDigits(n: Int): String {
+        val ar = "٠١٢٣٤٥٦٧٨٩"
+        return n.toString().map { if (it.isDigit()) ar[it - '0'] else it }.joinToString("")
+    }
+
     fun upcomingEvents(limit: Int = 4): List<IslamicEvent> {
         val today = HijrahDate.now()
         val hYear = today.get(ChronoField.YEAR)

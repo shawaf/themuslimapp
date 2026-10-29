@@ -13,9 +13,9 @@ android {
     defaultConfig {
         applicationId = "me.shawaf.themuslimapp"
         minSdk = 24
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0.2"
+        targetSdk = 35
+        versionCode = 2
+        versionName = "2.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -23,13 +23,38 @@ android {
         }
     }
 
+    signingConfigs {
+        // Release signing is supplied via env vars or gradle properties so no
+        // secrets live in the repo. Provide RELEASE_STORE_FILE / _PASSWORD /
+        // RELEASE_KEY_ALIAS / RELEASE_KEY_PASSWORD (e.g. in ~/.gradle/gradle.properties).
+        create("release") {
+            val storeFilePath = System.getenv("RELEASE_STORE_FILE")
+                ?: (project.findProperty("RELEASE_STORE_FILE") as String?)
+            if (storeFilePath != null) {
+                storeFile = file(storeFilePath)
+                storePassword = System.getenv("RELEASE_STORE_PASSWORD")
+                    ?: (project.findProperty("RELEASE_STORE_PASSWORD") as String?)
+                keyAlias = System.getenv("RELEASE_KEY_ALIAS")
+                    ?: (project.findProperty("RELEASE_KEY_ALIAS") as String?)
+                keyPassword = System.getenv("RELEASE_KEY_PASSWORD")
+                    ?: (project.findProperty("RELEASE_KEY_PASSWORD") as String?)
+            }
+        }
+    }
+
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            val hasKeystore = System.getenv("RELEASE_STORE_FILE") != null ||
+                project.hasProperty("RELEASE_STORE_FILE")
+            if (hasKeystore) {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
     }
     compileOptions {
