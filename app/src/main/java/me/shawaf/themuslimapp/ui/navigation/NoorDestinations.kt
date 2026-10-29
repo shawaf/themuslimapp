@@ -17,6 +17,19 @@ object NoorRoutes {
     const val HISTORY = "history"
     const val INFO = "info"
     const val SETTINGS = "settings"
+
+    /** Counter route — either a whole category or a single selected dhikr. */
+    const val COUNTER_PATTERN = "counter?category={category}&ar={ar}&en={en}&count={count}"
+
+    /** Count through every dhikr in a category. */
+    fun counterCategory(categoryId: String) = "counter?category=${android.net.Uri.encode(categoryId)}"
+
+    /** Count a single specific dhikr (e.g. from search). */
+    fun counter(ar: String, en: String, count: Int): String {
+        val arEnc = android.net.Uri.encode(ar)
+        val enEnc = android.net.Uri.encode(en)
+        return "counter?ar=$arEnc&en=$enEnc&count=$count"
+    }
 }
 
 /** A tab shown in the bottom navigation bar. */
@@ -31,8 +44,8 @@ val bottomNavTabs = listOf(
     NoorTab(NoorRoutes.HOME, R.string.nav_home, R.drawable.ic_feat_home),
     NoorTab(NoorRoutes.PRAYER, R.string.nav_prayer, R.drawable.ic_feat_prayer),
     NoorTab(NoorRoutes.QIBLA, R.string.nav_qibla, R.drawable.ic_feat_qibla),
-    NoorTab(NoorRoutes.SEBHA, R.string.nav_sebha, R.drawable.ic_feat_sebha),
-    NoorTab(NoorRoutes.DUAS, R.string.nav_duas, R.drawable.ic_feat_duas),
+    NoorTab(NoorRoutes.DUAS, R.string.nav_azkar, R.drawable.ic_feat_sebha),
+    NoorTab(NoorRoutes.SETTINGS, R.string.nav_settings, R.drawable.ic_feat_settings),
 )
 
 /** Routes that should display the bottom navigation bar. */

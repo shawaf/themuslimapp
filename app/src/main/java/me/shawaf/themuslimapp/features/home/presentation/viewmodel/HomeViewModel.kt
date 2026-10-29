@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import me.shawaf.themuslimapp.features.calendar.domain.HijriCalendarCalculator
+import me.shawaf.themuslimapp.features.prayer.domain.PrayerTimesCalculator
 import me.shawaf.themuslimapp.features.prayer.domain.usecase.GetPrayerDataUseCase
 import me.shawaf.themuslimapp.utils.LocaleHelper
 import java.text.SimpleDateFormat
@@ -21,6 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getPrayerDataUseCase: GetPrayerDataUseCase,
+    private val prayerTimesCalculator: PrayerTimesCalculator,
     private val hijriCalendarCalculator: HijriCalendarCalculator,
 ) : ViewModel() {
 
@@ -50,7 +52,15 @@ class HomeViewModel @Inject constructor(
 
         val sunrise = slots.firstOrNull { it.key == "SUNRISE" }?.epochMillis
         val sunset = slots.firstOrNull { it.key == "MAGHRIB" }?.epochMillis
+        // When all of today's prayers have passed, roll over to tomorrow's first prayer (Fajr).
         val next = slots.filter { it.canAzan }.firstOrNull { it.epochMillis > now }
+            ?: prayerTimesCalculator.computeForDay(
+                latitude = data.location.latitude,
+                longitude = data.location.longitude,
+                calcMethod = data.settings.calcMethod,
+                madhab = data.settings.madhab,
+                dayMillis = now + 24L * 60 * 60 * 1000,
+            ).filter { it.canAzan }.firstOrNull { it.epochMillis > now }
         val ar = LocaleHelper.isArabic()
 
         val progress = if (sunrise != null && sunset != null && sunset > sunrise) {

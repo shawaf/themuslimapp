@@ -9,10 +9,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import me.shawaf.themuslimapp.features.counter.presentation.view.CounterScreen
 import me.shawaf.themuslimapp.features.counter.presentation.viewmodel.CounterViewModel
 import me.shawaf.themuslimapp.features.duas.presentation.DuasScreen
@@ -64,7 +66,7 @@ fun TheMuslimApp(themeViewModel: ThemeViewModel) {
                 HomeScreen(
                     homeViewModel = homeViewModel,
                     onNavigate = { route -> navController.navigateToTab(route) },
-                    onSettings = { navController.navigate(NoorRoutes.SETTINGS) },
+                    onSettings = { navController.navigateToTab(NoorRoutes.SETTINGS) },
                 )
             }
 
@@ -78,7 +80,13 @@ fun TheMuslimApp(themeViewModel: ThemeViewModel) {
             }
             composable(NoorRoutes.DUAS) {
                 val duasViewModel: DuasViewModel = hiltViewModel()
-                DuasScreen(duasViewModel = duasViewModel)
+                DuasScreen(
+                    duasViewModel = duasViewModel,
+                    onOpenCategory = { id -> navController.navigate(NoorRoutes.counterCategory(id)) },
+                    onOpenCounter = { item ->
+                        navController.navigate(NoorRoutes.counter(item.ar, item.en, item.count))
+                    },
+                )
             }
 
             composable(NoorRoutes.HADITH) {
@@ -90,10 +98,19 @@ fun TheMuslimApp(themeViewModel: ThemeViewModel) {
                 CalendarScreen(calendarViewModel = calendarViewModel, onBack = { navController.popBackStack() })
             }
 
-            composable(NoorRoutes.SEBHA) {
+            composable(
+                route = NoorRoutes.COUNTER_PATTERN,
+                arguments = listOf(
+                    navArgument("category") { type = NavType.StringType; defaultValue = "" },
+                    navArgument("ar") { type = NavType.StringType; defaultValue = "" },
+                    navArgument("en") { type = NavType.StringType; defaultValue = "" },
+                    navArgument("count") { type = NavType.IntType; defaultValue = 0 },
+                ),
+            ) {
                 val counterViewModel: CounterViewModel = hiltViewModel()
                 CounterScreen(
                     counterViewModel = counterViewModel,
+                    onBack = { navController.popBackStack() },
                     onNavigateToHistory = { navController.navigate(NoorRoutes.HISTORY) },
                     onNavigateToInfo = { navController.navigate(NoorRoutes.INFO) },
                 )
@@ -110,7 +127,7 @@ fun TheMuslimApp(themeViewModel: ThemeViewModel) {
             }
 
             composable(NoorRoutes.SETTINGS) {
-                SettingsScreen(themeViewModel = themeViewModel, onBack = { navController.popBackStack() })
+                SettingsScreen(themeViewModel = themeViewModel, onBack = null)
             }
         }
     }

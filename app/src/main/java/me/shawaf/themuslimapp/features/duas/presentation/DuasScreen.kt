@@ -2,7 +2,6 @@ package me.shawaf.themuslimapp.features.duas.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,14 +11,16 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -32,84 +33,146 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import me.shawaf.themuslimapp.R
-import me.shawaf.themuslimapp.data.local.model.DuaCategory
-import me.shawaf.themuslimapp.data.local.model.DuaItem
+import me.shawaf.themuslimapp.data.local.model.AdhkarCategory
+import me.shawaf.themuslimapp.data.local.model.AdhkarItem
 import me.shawaf.themuslimapp.features.duas.presentation.viewmodel.DuasIntent
 import me.shawaf.themuslimapp.features.duas.presentation.viewmodel.DuasViewModel
+import me.shawaf.themuslimapp.features.duas.presentation.viewmodel.DuasViewState
 import me.shawaf.themuslimapp.ui.theme.AmiriFontFamily
 import me.shawaf.themuslimapp.ui.theme.NoorColors
 import me.shawaf.themuslimapp.utils.LocaleHelper
 
 @Composable
-fun DuasScreen(duasViewModel: DuasViewModel) {
+fun DuasScreen(
+    duasViewModel: DuasViewModel,
+    onOpenCategory: (String) -> Unit,
+    onOpenCounter: (AdhkarItem) -> Unit,
+) {
     val state by duasViewModel.viewState.collectAsState()
-    val selected = state.categories.firstOrNull { it.id == state.selectedCategoryId } ?: state.categories.firstOrNull()
+    val ar = LocaleHelper.isArabic()
+    val searching = state.searchQuery.isNotBlank()
 
     Column(modifier = Modifier.fillMaxSize().padding(horizontal = 20.dp).padding(top = 18.dp)) {
-        Text(stringResource(R.string.duas_azkar), color = MaterialTheme.colorScheme.onBackground, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+        Text(stringResource(R.string.azkar_title), color = MaterialTheme.colorScheme.onBackground, fontSize = 20.sp, fontWeight = FontWeight.Bold)
         Spacer(Modifier.height(14.dp))
 
-        LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp), contentPadding = PaddingValues(bottom = 16.dp)) {
-            item { SearchField(state.searchQuery) { duasViewModel.handleIntent(DuasIntent.Search(it)) } }
-            item {
-                CategoryChips(state.categories, state.selectedCategoryId) {
-                    duasViewModel.handleIntent(DuasIntent.SelectCategory(it))
-                }
-            }
-            if (state.categories.size >= 2) {
-                item {
-                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(11.dp)) {
-                        FeaturedCard(state.categories[0], state.categories[0].id == state.selectedCategoryId, R.drawable.ic_w_fajr, Modifier.weight(1f)) {
-                            duasViewModel.handleIntent(DuasIntent.SelectCategory(state.categories[0].id))
-                        }
-                        FeaturedCard(state.categories[1], state.categories[1].id == state.selectedCategoryId, R.drawable.ic_w_isha, Modifier.weight(1f)) {
-                            duasViewModel.handleIntent(DuasIntent.SelectCategory(state.categories[1].id))
-                        }
-                    }
-                }
-            }
-            item {
-                val secName = selected?.let { if (LocaleHelper.isArabic()) it.titleAr else it.titleEn } ?: ""
-                Text(secName, color = MaterialTheme.colorScheme.onBackground, fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 4.dp))
-            }
-            val duas = state.visibleDuas
-            if (!state.isLoading && duas.isEmpty()) {
-                item { Text(stringResource(R.string.no_duas), color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp) }
+        SearchField(state.searchQuery) { duasViewModel.handleIntent(DuasIntent.Search(it)) }
+        Spacer(Modifier.height(14.dp))
+
+        if (searching) {
+            // Search results: matching adhkar across all categories → straight to the counter.
+            val results = state.visible
+            if (results.isEmpty()) {
+                Text(stringResource(R.string.no_adhkar), color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp)
             } else {
-                items(duas) { dua -> DuaCard(dua) }
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    contentPadding = PaddingValues(bottom = 16.dp),
+                    modifier = Modifier.fillMaxSize(),
+                ) {
+                    items(results) { item -> AdhkarResultCard(item, ar) { onOpenCounter(item) } }
+                }
+            }
+        } else {
+            // Category cards: After Salah, Morning, Evening, …
+            val categories = state.categories.filter { it.id != DuasViewState.ALL }
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                contentPadding = PaddingValues(bottom = 16.dp),
+                modifier = Modifier.fillMaxSize(),
+            ) {
+                items(categories) { cat ->
+                    val count = state.adhkar.count { it.categoryId == cat.id }
+                    CategoryCard(cat, count, ar) { onOpenCategory(cat.id) }
+                }
             }
         }
     }
 }
 
 @Composable
-private fun FeaturedCard(category: DuaCategory, selected: Boolean, iconRes: Int, modifier: Modifier, onClick: () -> Unit) {
+private fun CategoryCard(category: AdhkarCategory, itemCount: Int, ar: Boolean, onClick: () -> Unit) {
     Column(
-        modifier = modifier
-            .shadow(if (selected) 8.dp else 4.dp, RoundedCornerShape(18.dp), clip = false)
-            .clip(RoundedCornerShape(18.dp))
-            .background(
-                if (selected) Brush.linearGradient(listOf(NoorColors.Emerald, NoorColors.EmeraldDark))
-                else Brush.linearGradient(listOf(MaterialTheme.colorScheme.surface, MaterialTheme.colorScheme.surface)),
-            )
-            .clickable(onClick = onClick).padding(15.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(min = 118.dp)
+            .shadow(6.dp, RoundedCornerShape(20.dp), clip = false)
+            .clip(RoundedCornerShape(20.dp))
+            .background(Brush.linearGradient(listOf(NoorColors.Emerald, NoorColors.EmeraldDark)))
+            .clickable(onClick = onClick)
+            .padding(16.dp),
+        verticalArrangement = Arrangement.SpaceBetween,
     ) {
-        val catName = if (LocaleHelper.isArabic()) category.titleAr else category.titleEn
-        Icon(painterResource(iconRes), null, tint = if (selected) NoorColors.GoldLight else NoorColors.Gold, modifier = Modifier.size(16.dp))
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+            Icon(painterResource(R.drawable.ic_feat_sebha), null, tint = NoorColors.GoldLight, modifier = Modifier.size(22.dp))
+            Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, null, tint = NoorColors.GoldLight.copy(alpha = 0.7f), modifier = Modifier.size(18.dp))
+        }
+        Spacer(Modifier.height(14.dp))
+        Column {
+            Text(
+                text = if (ar) category.titleAr else category.titleEn,
+                color = androidx.compose.ui.graphics.Color.White,
+                fontSize = 16.sp, fontWeight = FontWeight.Bold,
+                maxLines = 2, overflow = TextOverflow.Ellipsis,
+            )
+            Spacer(Modifier.height(2.dp))
+            Text(
+                text = stringResource(R.string.adhkar_count, itemCount),
+                color = NoorColors.GoldLight, fontSize = 11.sp, fontWeight = FontWeight.SemiBold,
+            )
+        }
+    }
+}
+
+@Composable
+private fun AdhkarResultCard(item: AdhkarItem, ar: Boolean, onClick: () -> Unit) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(min = 150.dp)
+            .shadow(5.dp, RoundedCornerShape(18.dp), clip = false)
+            .clip(RoundedCornerShape(18.dp))
+            .background(MaterialTheme.colorScheme.surface)
+            .clickable(onClick = onClick)
+            .padding(14.dp),
+    ) {
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = if (ar) item.categoryAr else item.categoryEn,
+                color = NoorColors.Gold, fontSize = 10.5.sp, fontWeight = FontWeight.Bold,
+                maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f, fill = false),
+            )
+            Text(
+                text = stringResource(R.string.times_count, item.count),
+                color = NoorColors.Emerald, fontSize = 12.sp, fontWeight = FontWeight.ExtraBold,
+                modifier = Modifier.clip(RoundedCornerShape(10.dp))
+                    .background(MaterialTheme.colorScheme.surfaceVariant).padding(horizontal = 8.dp, vertical = 3.dp),
+            )
+        }
         Spacer(Modifier.height(10.dp))
-        Text("$catName ${stringResource(R.string.azkar_suffix)}", color = if (selected) Color.White else MaterialTheme.colorScheme.onBackground, fontSize = 14.sp, fontWeight = FontWeight.Bold)
-        Text(stringResource(R.string.adhkar_count, category.duas.size), color = if (selected) Color(0xFFA9CCC0) else MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 11.sp)
+        Box(modifier = Modifier.fillMaxWidth().weight(1f), contentAlignment = Alignment.Center) {
+            Text(
+                text = item.ar,
+                color = MaterialTheme.colorScheme.onSurface,
+                fontFamily = AmiriFontFamily, fontWeight = FontWeight.Bold,
+                fontSize = 17.sp, lineHeight = 28.sp, textAlign = TextAlign.Center,
+                maxLines = 4, overflow = TextOverflow.Ellipsis,
+            )
+        }
     }
 }
 
@@ -131,49 +194,6 @@ private fun SearchField(query: String, onQueryChange: (String) -> Unit) {
                 textStyle = TextStyle(color = MaterialTheme.colorScheme.onBackground, fontSize = 14.sp),
                 cursorBrush = SolidColor(NoorColors.Gold), modifier = Modifier.fillMaxWidth(),
             )
-        }
-    }
-}
-
-@Composable
-private fun CategoryChips(categories: List<DuaCategory>, selectedId: String, onSelect: (String) -> Unit) {
-    Row(modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(9.dp)) {
-        categories.forEach { category ->
-            val sel = category.id == selectedId
-            Text(
-                text = if (LocaleHelper.isArabic()) category.titleAr else category.titleEn,
-                color = if (sel) NoorColors.Surface else NoorColors.Emerald,
-                fontSize = 12.sp, fontWeight = if (sel) FontWeight.Bold else FontWeight.SemiBold,
-                modifier = Modifier.clip(RoundedCornerShape(20.dp))
-                    .background(if (sel) NoorColors.Emerald else MaterialTheme.colorScheme.surface)
-                    .clickable { onSelect(category.id) }.padding(horizontal = 15.dp, vertical = 8.dp),
-            )
-        }
-    }
-}
-
-@Composable
-private fun DuaCard(dua: DuaItem) {
-    Column(
-        modifier = Modifier.fillMaxWidth()
-            .shadow(5.dp, RoundedCornerShape(18.dp), clip = false)
-            .clip(RoundedCornerShape(18.dp)).background(MaterialTheme.colorScheme.surface).padding(16.dp),
-    ) {
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.Top) {
-            if (dua.translit.isNotEmpty()) {
-                Text(dua.translit, color = NoorColors.Emerald, fontSize = 11.sp, fontWeight = FontWeight.Bold,
-                    modifier = Modifier.clip(RoundedCornerShape(12.dp)).background(MaterialTheme.colorScheme.surfaceVariant).padding(horizontal = 9.dp, vertical = 3.dp))
-            } else Spacer(Modifier.size(1.dp))
-            if (dua.count > 1) Text("×${dua.count}", color = NoorColors.Gold, fontSize = 12.sp, fontWeight = FontWeight.Bold)
-        }
-        Spacer(Modifier.height(12.dp))
-        Text(dua.ar, color = MaterialTheme.colorScheme.onBackground, fontSize = 21.sp, fontFamily = AmiriFontFamily,
-            fontWeight = FontWeight.Bold, textAlign = TextAlign.End, lineHeight = 38.sp, modifier = Modifier.fillMaxWidth())
-        Spacer(Modifier.height(10.dp))
-        Text(dua.en, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp, lineHeight = 18.sp)
-        if (dua.reference.isNotEmpty()) {
-            Spacer(Modifier.height(8.dp))
-            Text(dua.reference, color = NoorColors.Gold, fontSize = 11.sp, fontWeight = FontWeight.SemiBold)
         }
     }
 }

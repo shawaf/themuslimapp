@@ -266,12 +266,12 @@ private data class FeatureTile(val labelRes: Int, val iconRes: Int, val route: S
 @Composable
 private fun FeatureGrid(onNavigate: (String) -> Unit) {
     val tiles = listOf(
-        FeatureTile(R.string.nav_sebha, R.drawable.ic_feat_sebha, NoorRoutes.SEBHA),
+        FeatureTile(R.string.nav_azkar, R.drawable.ic_feat_sebha, NoorRoutes.DUAS),
         FeatureTile(R.string.nav_prayer, R.drawable.ic_feat_prayer, NoorRoutes.PRAYER),
         FeatureTile(R.string.nav_qibla, R.drawable.ic_feat_qibla, NoorRoutes.QIBLA),
-        FeatureTile(R.string.nav_duas, R.drawable.ic_feat_duas, NoorRoutes.DUAS),
         FeatureTile(R.string.feat_hadith, R.drawable.ic_feat_hadith, NoorRoutes.HADITH),
         FeatureTile(R.string.feat_calendar, R.drawable.ic_feat_calendar, NoorRoutes.CALENDAR),
+        FeatureTile(R.string.nav_settings, R.drawable.ic_feat_settings, NoorRoutes.SETTINGS),
     )
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         tiles.chunked(3).forEach { rowTiles ->

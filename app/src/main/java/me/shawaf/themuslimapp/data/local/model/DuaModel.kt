@@ -23,3 +23,22 @@ data class DuaCategory(
 data class DuasWrapper(
     val categories: List<DuaCategory> = emptyList(),
 )
+
+/** A single countable dhikr for the merged Azkar grid — from duas.json or zekr.json. */
+data class AdhkarItem(
+    val ar: String,
+    val en: String,
+    val translit: String,
+    val count: Int,
+    val reference: String,
+    val categoryId: String,
+    val categoryAr: String,
+    val categoryEn: String,
+)
+
+/** A category filter tab for the Azkar grid. */
+data class AdhkarCategory(
+    val id: String,
+    val titleAr: String,
+    val titleEn: String,
+)

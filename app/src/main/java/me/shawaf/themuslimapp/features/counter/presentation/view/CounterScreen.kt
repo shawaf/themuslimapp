@@ -1,46 +1,22 @@
 package me.shawaf.themuslimapp.features.counter.presentation.view
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import me.shawaf.themuslimapp.R
 import me.shawaf.themuslimapp.features.counter.presentation.viewmodel.CounterIntent
 import me.shawaf.themuslimapp.features.counter.presentation.viewmodel.CounterViewModel
 import me.shawaf.themuslimapp.ui.components.ActionButton
 import me.shawaf.themuslimapp.ui.components.ActionButtonWithState
 import me.shawaf.themuslimapp.ui.components.AppScaffold
-import me.shawaf.themuslimapp.ui.theme.NoorColors
 import me.shawaf.themuslimapp.utils.SoundUtils
 import me.shawaf.themuslimapp.utils.VibrationUtils
 
@@ -48,17 +24,15 @@ import me.shawaf.themuslimapp.utils.VibrationUtils
 @Composable
 fun CounterScreen(
     counterViewModel: CounterViewModel,
+    onBack: () -> Unit,
     onNavigateToHistory: () -> Unit,
     onNavigateToInfo: () -> Unit
 ) {
-    var currentZekrCount by remember { mutableIntStateOf(0) }
-    var nextCardIndex by remember { mutableStateOf(0) }
-    val lastNextCardIndexValue = 0
     val counterViewState by counterViewModel.viewState.collectAsState()
 
     AppScaffold(LocalContext.current.getString(R.string.salat_khatm),
         configModel = counterViewState.configModel,
-        onBackPressed = null,
+        onBackPressed = onBack,
         withBottomBar = false,
         onSwitchTheme = null,
         onNavigateToInfo = onNavigateToInfo,
@@ -81,86 +55,34 @@ fun CounterScreen(
         }) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
             val context = LocalContext.current
-            val azkarList = counterViewState.zekrList
-            if (azkarList.isNotEmpty()) HorizontalCardSwitcher(
-                azkarList, nextCardIndex
-            ) { zekrEntity ->
-                counterViewModel.handleIntent(CounterIntent.SetCurrentZekrEntity(zekrEntity))
-                currentZekrCount = zekrEntity.count
-            }
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Row(verticalAlignment = Alignment.Bottom) {
-                    Text(
-                        text = "${counterViewState.counter}",
-                        fontSize = 84.sp,
-                        fontWeight = FontWeight.ExtraBold,
-                        color = MaterialTheme.colorScheme.primary,
-                    )
-                    if (currentZekrCount > 0) {
-                        Text(
-                            text = " / $currentZekrCount",
-                            fontSize = 22.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.padding(bottom = 16.dp),
-                        )
-                    }
-                }
-                Spacer(Modifier.height(14.dp))
-                val fraction = if (currentZekrCount > 0) {
-                    counterViewState.counter.coerceAtMost(currentZekrCount).toFloat() / currentZekrCount
-                } else {
-                    0f
-                }
-                Box(
-                    modifier = Modifier
-                        .width(220.dp)
-                        .height(8.dp)
-                        .clip(RoundedCornerShape(4.dp))
-                        .background(MaterialTheme.colorScheme.surfaceVariant),
+            val current = counterViewState.currentItem
+
+            if (current != null) {
+                TapCounterCard(
+                    zekrText = current.zekr,
+                    count = counterViewState.counter,
+                    target = current.count,
+                    totalCards = counterViewState.items.size,
+                    currentIndex = counterViewState.currentIndex,
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth(fraction)
-                            .fillMaxHeight()
-                            .clip(RoundedCornerShape(4.dp))
-                            .background(NoorColors.Gold),
-                    )
-                }
-            }
-            DragAndDropToggle {
-                //Increase Counter
-                counterViewModel.handleIntent(CounterIntent.IncreaseCounter)
+                    // Save the dhikr being counted, then count + advance atomically in the ViewModel.
+                    counterViewModel.handleIntent(CounterIntent.SaveZekrUpdate)
+                    counterViewModel.handleIntent(CounterIntent.Count)
 
-                //Add new zekr to database
-                counterViewModel.handleIntent(CounterIntent.SaveZekrUpdate)
-
-                //Switch Cards if card/zekr count finish
-                val counter = counterViewState.counter + 1
-                nextCardIndex = if (counter >= currentZekrCount) {
-                    // Reset Counter with delay, When Zekr Times Finished
-                    CoroutineScope(Dispatchers.Main).launch {
-                        delay(300)
-                        counterViewModel.handleIntent(CounterIntent.ResetCounter)
+                    //Play zekr sound if enabled
+                    if (counterViewState.configModel.soundEnabled) {
+                        SoundUtils.playClickSound(context)
                     }
-                    if (nextCardIndex >= azkarList.lastIndex) 0
-                    else nextCardIndex + 1
-                } else nextCardIndex
 
-                //Play Zekr Sound if it was Enabled
-                if (counterViewState.configModel.soundEnabled) {
-                    SoundUtils.playClickSound(context)
-                }
-
-                //Play Zekr Vibration if it was Enabled
-                if (counterViewState.configModel.vibrationEnabled) {
-                    VibrationUtils.vibrate(context, false)
+                    //Play zekr vibration if enabled
+                    if (counterViewState.configModel.vibrationEnabled) {
+                        VibrationUtils.vibrate(context, false)
+                    }
                 }
             }
         }

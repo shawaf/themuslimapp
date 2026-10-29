@@ -39,7 +39,7 @@ import me.shawaf.themuslimapp.ui.viewmodel.ThemeViewModel
 import me.shawaf.themuslimapp.utils.LocaleHelper
 
 @Composable
-fun SettingsScreen(themeViewModel: ThemeViewModel, onBack: () -> Unit) {
+fun SettingsScreen(themeViewModel: ThemeViewModel, onBack: (() -> Unit)? = null) {
     val mode by themeViewModel.themeMode.collectAsState()
 
     Column(
