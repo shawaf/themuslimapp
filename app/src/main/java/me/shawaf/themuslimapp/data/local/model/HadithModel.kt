@@ -16,6 +16,7 @@ data class HadithCollection(
     val id: String,
     @SerializedName("name_ar") val nameAr: String,
     @SerializedName("name_en") val nameEn: String,
+    val total: Int = 0,
     val hadiths: List<HadithItem> = emptyList(),
 )
 

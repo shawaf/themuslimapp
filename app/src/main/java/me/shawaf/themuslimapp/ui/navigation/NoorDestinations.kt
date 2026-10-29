@@ -1,12 +1,6 @@
 package me.shawaf.themuslimapp.ui.navigation
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Place
-import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.ui.graphics.vector.ImageVector
+import me.shawaf.themuslimapp.R
 
 /**
  * Route constants for every screen in the app. The counter (Sebha) screen keeps
@@ -29,16 +23,16 @@ object NoorRoutes {
 data class NoorTab(
     val route: String,
     val label: String,
-    val icon: ImageVector,
+    val iconRes: Int,
 )
 
 /** The five primary tabs in the bottom navigation bar. */
 val bottomNavTabs = listOf(
-    NoorTab(NoorRoutes.HOME, "Home", Icons.Default.Home),
-    NoorTab(NoorRoutes.PRAYER, "Prayer", Icons.Default.Notifications),
-    NoorTab(NoorRoutes.QIBLA, "Qibla", Icons.Default.Place),
-    NoorTab(NoorRoutes.SEBHA, "Sebha", Icons.Default.Refresh),
-    NoorTab(NoorRoutes.DUAS, "Duas", Icons.Default.FavoriteBorder),
+    NoorTab(NoorRoutes.HOME, "Home", R.drawable.ic_feat_home),
+    NoorTab(NoorRoutes.PRAYER, "Prayer", R.drawable.ic_feat_prayer),
+    NoorTab(NoorRoutes.QIBLA, "Qibla", R.drawable.ic_feat_qibla),
+    NoorTab(NoorRoutes.SEBHA, "Sebha", R.drawable.ic_feat_sebha),
+    NoorTab(NoorRoutes.DUAS, "Duas", R.drawable.ic_feat_duas),
 )
 
 /** Routes that should display the bottom navigation bar. */
