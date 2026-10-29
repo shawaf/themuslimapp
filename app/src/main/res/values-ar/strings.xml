@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">نور</string>
+    <string name="prayer_widget_description">مواقيت الصلاة اليوم مع العد التنازلي للصلاة القادمة.</string>
 
     <string name="salat_khatm">أذكار بعد الصلاة</string>
     <string name="count_number">العدد: %s</string>

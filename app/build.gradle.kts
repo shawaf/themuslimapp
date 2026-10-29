@@ -127,6 +127,11 @@ dependencies {
     implementation(libs.play.services.maps)
     implementation(libs.maps.compose)
 
+    //Home-screen widget (Jetpack Glance) + periodic refresh
+    implementation(libs.glance.appwidget)
+    implementation(libs.glance.material3)
+    implementation(libs.work.runtime.ktx)
+
     //Logging
     implementation(libs.timber)
 
