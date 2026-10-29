@@ -18,6 +18,9 @@ hilt = "2.51.1"
 hilt-nav = "1.2.0"
 gson = "2.10.1"
 timber = "5.0.1"
+adhan = "1.2.1"
+playServicesLocation = "21.3.0"
+desugarJdkLibs = "2.1.3"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -45,12 +48,14 @@ hilt-navigation = {group = "androidx.hilt", name = "hilt-navigation-compose", ve
 hilt-compiler = {group = "com.google.dagger", name = "hilt-android-compiler", version.ref ="hilt"}
 gson = {group = "com.google.code.gson", name = "gson", version.ref = "gson"}
 timber = {group = "com.jakewharton.timber", name = "timber", version.ref = "timber"}
+adhan = { group = "com.batoulapps.adhan", name = "adhan", version.ref = "adhan" }
+play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
+desugar-jdk-libs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugarJdkLibs" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 hilt-plugin = { id = "com.google.dagger.hilt.android", version.ref = "hilt"}
-kotlin-kapt = {id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin-kapt"}
 kotlin-ksp = {id = "com.google.devtools.ksp", version.ref = "kotlin-ksp"}
 compose-plugin = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 
