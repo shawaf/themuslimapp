@@ -94,10 +94,10 @@ fun CalendarScreen(calendarViewModel: CalendarViewModel, onBack: () -> Unit) {
         }
 
         Spacer(Modifier.height(20.dp))
-        Text("Upcoming events", color = MaterialTheme.colorScheme.onBackground, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+        Text("Events this year", color = MaterialTheme.colorScheme.onBackground, fontSize = 15.sp, fontWeight = FontWeight.Bold)
         Spacer(Modifier.height(10.dp))
         Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            state.events.forEachIndexed { index, event -> EventCard(event, highlight = index == 0) }
+            state.events.forEach { event -> EventCard(event, highlight = event.isNext) }
         }
     }
 }
@@ -122,9 +122,26 @@ private fun DayCell(day: CalendarDay, modifier: Modifier = Modifier) {
 
 @Composable
 private fun EventCard(event: IslamicEvent, highlight: Boolean) {
+    val isPast = event.daysAway < 0
+    val accent = when {
+        highlight -> NoorColors.GoldLight
+        isPast -> MaterialTheme.colorScheme.onSurfaceVariant
+        else -> NoorColors.Gold
+    }
+    val nameColor = when {
+        highlight -> Color.White
+        isPast -> MaterialTheme.colorScheme.onSurfaceVariant
+        else -> MaterialTheme.colorScheme.onBackground
+    }
+    val subColor = if (highlight) Color.White.copy(alpha = 0.7f) else MaterialTheme.colorScheme.onSurfaceVariant
+    val awayText = when {
+        event.daysAway == 0 -> "Today"
+        event.daysAway > 0 -> "in ${event.daysAway}d"
+        else -> "${-event.daysAway}d ago"
+    }
     Row(
         modifier = Modifier.fillMaxWidth()
-            .shadow(if (highlight) 10.dp else 4.dp, RoundedCornerShape(18.dp), clip = false)
+            .shadow(if (highlight) 10.dp else 3.dp, RoundedCornerShape(18.dp), clip = false)
             .clip(RoundedCornerShape(18.dp))
             .background(
                 if (highlight) Brush.linearGradient(listOf(NoorColors.Emerald, NoorColors.EmeraldDark))
@@ -134,24 +151,14 @@ private fun EventCard(event: IslamicEvent, highlight: Boolean) {
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.width(46.dp)) {
-            Text("${event.gregDay}",
-                color = if (highlight) NoorColors.GoldLight else NoorColors.Gold,
-                fontSize = 22.sp, fontWeight = FontWeight.ExtraBold)
-            Text(event.gregMonthShort,
-                color = if (highlight) Color.White.copy(alpha = 0.7f) else MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 10.sp)
+            Text("${event.gregDay}", color = accent, fontSize = 22.sp, fontWeight = FontWeight.ExtraBold)
+            Text(event.gregMonthShort, color = subColor, fontSize = 10.sp)
         }
         Spacer(Modifier.size(14.dp))
         Column(modifier = Modifier.weight(1f)) {
-            Text(event.nameEn,
-                color = if (highlight) Color.White else MaterialTheme.colorScheme.onBackground,
-                fontSize = 14.sp, fontWeight = FontWeight.Bold)
-            Text(event.hijriLabel,
-                color = if (highlight) Color.White.copy(alpha = 0.7f) else MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 11.5.sp)
+            Text(event.nameEn, color = nameColor, fontSize = 14.sp, fontWeight = FontWeight.Bold)
+            Text(event.hijriLabel, color = subColor, fontSize = 11.5.sp)
         }
-        Text(
-            if (event.daysAway == 0) "Today" else "in ${event.daysAway}d",
-            color = if (highlight) NoorColors.GoldLight else NoorColors.Gold,
-            fontSize = 12.sp, fontWeight = FontWeight.Bold,
-        )
+        Text(awayText, color = accent, fontSize = 12.sp, fontWeight = FontWeight.Bold)
     }
 }

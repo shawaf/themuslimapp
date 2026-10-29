@@ -16,5 +16,8 @@ data class IslamicEvent(
     val gregDay: Int,
     val gregMonthShort: String,
     val hijriLabel: String,
+    /** Signed: negative = past, 0 = today, positive = upcoming. */
     val daysAway: Int,
+    /** The nearest upcoming event of the year. */
+    val isNext: Boolean = false,
 )

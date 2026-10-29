@@ -56,7 +56,8 @@ class HijriCalendarCalculator @Inject constructor() {
         return n.toString().map { if (it.isDigit()) ar[it - '0'] else it }.joinToString("")
     }
 
-    fun upcomingEvents(limit: Int = 20): List<IslamicEvent> {
+    /** All notable events of the CURRENT Hijri year (past and upcoming), in date order. */
+    fun currentYearEvents(): List<IslamicEvent> {
         val today = HijrahDate.now()
         val hYear = today.get(ChronoField.YEAR)
         val todayEpoch = today.toEpochDay()
@@ -78,25 +79,20 @@ class HijriCalendarCalculator @Inject constructor() {
             Triple("Days of Tashreeq", 12, 11),
         )
 
-        val events = mutableListOf<IslamicEvent>()
-        for (y in listOf(hYear, hYear + 1)) {
-            for ((name, m, d) in defs) {
-                val hd = runCatching { HijrahDate.of(y, m, d) }.getOrNull() ?: continue
-                val epoch = hd.toEpochDay()
-                if (epoch >= todayEpoch) {
-                    val greg = LocalDate.ofEpochDay(epoch)
-                    events.add(
-                        IslamicEvent(
-                            nameEn = name,
-                            gregDay = greg.dayOfMonth,
-                            gregMonthShort = greg.month.getDisplayName(TextStyle.SHORT, Locale.ENGLISH),
-                            hijriLabel = "$d ${monthsEn[m - 1]}",
-                            daysAway = (epoch - todayEpoch).toInt(),
-                        ),
-                    )
-                }
-            }
-        }
-        return events.sortedBy { it.daysAway }.take(limit)
+        val events = defs.mapNotNull { (name, m, d) ->
+            val hd = runCatching { HijrahDate.of(hYear, m, d) }.getOrNull() ?: return@mapNotNull null
+            val epoch = hd.toEpochDay()
+            val greg = LocalDate.ofEpochDay(epoch)
+            IslamicEvent(
+                nameEn = name,
+                gregDay = greg.dayOfMonth,
+                gregMonthShort = greg.month.getDisplayName(TextStyle.SHORT, Locale.ENGLISH),
+                hijriLabel = "$d ${monthsEn[m - 1]}",
+                daysAway = (epoch - todayEpoch).toInt(),
+            )
+        }.sortedBy { it.daysAway }
+
+        val nextIndex = events.indexOfFirst { it.daysAway >= 0 }
+        return events.mapIndexed { i, e -> e.copy(isNext = i == nextIndex) }
     }
 }

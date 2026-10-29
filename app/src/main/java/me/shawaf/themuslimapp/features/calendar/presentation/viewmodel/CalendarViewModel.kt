@@ -31,7 +31,7 @@ class CalendarViewModel @Inject constructor(
         viewModelScope.launch {
             _viewState.value = CalendarViewState(
                 month = calculator.currentMonth(),
-                events = calculator.upcomingEvents(),
+                events = calculator.currentYearEvents(),
                 isLoading = false,
             )
         }
