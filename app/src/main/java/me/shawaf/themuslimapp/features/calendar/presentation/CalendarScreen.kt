@@ -33,12 +33,14 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import me.shawaf.themuslimapp.features.calendar.domain.model.CalendarDay
 import me.shawaf.themuslimapp.features.calendar.domain.model.IslamicEvent
+import me.shawaf.themuslimapp.R
 import me.shawaf.themuslimapp.features.calendar.presentation.viewmodel.CalendarViewModel
 import me.shawaf.themuslimapp.ui.theme.AmiriFontFamily
 import me.shawaf.themuslimapp.ui.theme.NoorColors
@@ -79,7 +81,7 @@ fun CalendarScreen(calendarViewModel: CalendarViewModel, onBack: () -> Unit) {
                         Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, "Back", tint = Color.White, modifier = Modifier.size(20.dp))
                     }
                     Spacer(Modifier.size(12.dp))
-                    Text("Islamic Calendar", color = Color.White, fontSize = 17.sp, fontWeight = FontWeight.Bold)
+                    Text(stringResource(R.string.islamic_calendar), color = Color.White, fontSize = 17.sp, fontWeight = FontWeight.Bold)
                 }
                 Spacer(Modifier.height(14.dp))
                 Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -117,7 +119,7 @@ fun CalendarScreen(calendarViewModel: CalendarViewModel, onBack: () -> Unit) {
             }
 
             Spacer(Modifier.height(20.dp))
-            Text("Events this year", color = MaterialTheme.colorScheme.onBackground, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+            Text(stringResource(R.string.events_this_year), color = MaterialTheme.colorScheme.onBackground, fontSize = 15.sp, fontWeight = FontWeight.Bold)
             Spacer(Modifier.height(10.dp))
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 state.events.forEach { event -> EventCard(event, highlight = event.isNext) }
@@ -157,9 +159,9 @@ private fun EventCard(event: IslamicEvent, highlight: Boolean) {
     }
     val subColor = if (highlight) Color(0xFFBBD6CC) else MaterialTheme.colorScheme.onSurfaceVariant
     val awayText = when {
-        event.daysAway == 0 -> "Today"
-        event.daysAway > 0 -> "in ${event.daysAway}d"
-        else -> "${-event.daysAway}d ago"
+        event.daysAway == 0 -> stringResource(R.string.event_today)
+        event.daysAway > 0 -> stringResource(R.string.event_in_days, event.daysAway)
+        else -> stringResource(R.string.event_days_ago, -event.daysAway)
     }
     Row(
         modifier = Modifier.fillMaxWidth()

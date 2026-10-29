@@ -37,6 +37,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -45,6 +46,7 @@ import me.shawaf.themuslimapp.features.prayer.presentation.viewmodel.PrayerInten
 import me.shawaf.themuslimapp.features.prayer.presentation.viewmodel.PrayerSlotUi
 import me.shawaf.themuslimapp.features.prayer.presentation.viewmodel.PrayerViewModel
 import me.shawaf.themuslimapp.ui.theme.NoorColors
+import me.shawaf.themuslimapp.utils.LocaleHelper
 
 private fun weatherIcon(key: String): Int = when (key) {
     "FAJR" -> R.drawable.ic_w_fajr
@@ -93,7 +95,7 @@ fun PrayerScreen(prayerViewModel: PrayerViewModel) {
                 }
             }
             Column(modifier = Modifier.padding(horizontal = 22.dp).padding(top = 22.dp, bottom = 22.dp)) {
-                Text("Prayer Times", color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                Text(stringResource(R.string.prayer_times), color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Bold)
                 Text(state.dateLabel, color = Color(0xFF9FC6BA), fontSize = 12.sp)
                 Spacer(Modifier.height(16.dp))
                 Row(
@@ -106,7 +108,7 @@ fun PrayerScreen(prayerViewModel: PrayerViewModel) {
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Column {
-                        Text("UP NEXT", color = NoorColors.GoldLight, fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                        Text(stringResource(R.string.up_next).uppercase(), color = NoorColors.GoldLight, fontSize = 11.sp, fontWeight = FontWeight.Bold)
                         Text("${state.nextNameEn} · ${state.nextTimeText}", color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Bold)
                     }
                     if (state.countdown.isNotEmpty()) {
@@ -164,9 +166,10 @@ private fun PrayerRow(slot: PrayerSlotUi, onToggleAzan: () -> Unit) {
             )
             Spacer(Modifier.size(12.dp))
             Column {
-                Text(slot.nameEn, color = if (isNext) Color.White else MaterialTheme.colorScheme.onBackground,
+                Text(if (LocaleHelper.isArabic()) slot.nameAr else slot.nameEn,
+                    color = if (isNext) Color.White else MaterialTheme.colorScheme.onBackground,
                     fontSize = 15.sp, fontWeight = if (isNext) FontWeight.Bold else FontWeight.SemiBold)
-                if (isNext) Text("Current", color = Color(0xFFA9CCC0), fontSize = 11.sp)
+                if (isNext) Text(stringResource(R.string.current), color = Color(0xFFA9CCC0), fontSize = 11.sp)
             }
         }
         Row(verticalAlignment = Alignment.CenterVertically) {

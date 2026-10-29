@@ -1,0 +1,80 @@
+<resources>
+    <string name="app_name">نور</string>
+
+    <string name="salat_khatm">أذكار بعد الصلاة</string>
+    <string name="count_number">العدد: %s</string>
+    <string name="slide_to_count">اسحب للعدّ</string>
+
+    <string name="nav_home">الرئيسية</string>
+    <string name="nav_prayer">الصلاة</string>
+    <string name="nav_qibla">القبلة</string>
+    <string name="nav_sebha">السبحة</string>
+    <string name="nav_duas">الأدعية</string>
+    <string name="feat_hadith">الحديث</string>
+    <string name="feat_calendar">التقويم</string>
+
+    <string name="greeting_salam">السلام عليكم</string>
+    <string name="greeting_peace">ورحمة الله وبركاته</string>
+    <string name="my_location">موقعي</string>
+    <string name="explore">استكشف</string>
+    <string name="next_label">التالية</string>
+    <string name="play_adhan">تشغيل الأذان</string>
+    <string name="playing_adhan">جارٍ تشغيل الأذان…</string>
+    <string name="dua_of_the_day">دعاء اليوم</string>
+    <string name="sunrise">الشروق</string>
+    <string name="sunset">الغروب</string>
+
+    <string name="prayer_times">مواقيت الصلاة</string>
+    <string name="up_next">التالية</string>
+    <string name="current">الحالية</string>
+
+    <string name="qibla_compass">بوصلة القبلة</string>
+    <string name="direction_to_makkah">اتجاه مكة</string>
+    <string name="facing_qibla">✓ أنت تواجه القبلة</string>
+    <string name="rotate_to_qibla">أدِر الجهاز حتى يشير السهم للأعلى</string>
+    <string name="distance">المسافة</string>
+    <string name="qibla_bearing">اتجاه القبلة</string>
+    <string name="using_default">افتراضي</string>
+
+    <string name="duas_azkar">الأدعية والأذكار</string>
+    <string name="search_duas">ابحث في الأدعية والأذكار…</string>
+    <string name="no_duas">لا توجد أدعية</string>
+    <string name="azkar_suffix">أذكار</string>
+    <string name="adhkar_count">%d أذكار</string>
+
+    <string name="hadith_library">مكتبة الحديث</string>
+    <string name="collection">المجموعة</string>
+    <string name="hadith_count">%s حديث</string>
+    <string name="hadith_of_the_day">حديث اليوم</string>
+    <string name="browse_hadith">تصفّح الأحاديث</string>
+
+    <string name="islamic_calendar">التقويم الهجري</string>
+    <string name="events_this_year">مناسبات هذا العام</string>
+    <string name="event_today">اليوم</string>
+    <string name="event_in_days">خلال %d يوم</string>
+    <string name="event_days_ago">منذ %d يوم</string>
+
+    <string name="settings">الإعدادات</string>
+    <string name="appearance">المظهر</string>
+    <string name="theme_system">افتراضي النظام</string>
+    <string name="theme_system_sub">اتبع سمة الجهاز</string>
+    <string name="theme_light">فاتح</string>
+    <string name="theme_light_sub">عاجي وزمردي</string>
+    <string name="theme_dark">داكن</string>
+    <string name="theme_dark_sub">وضع ليلي زمردي</string>
+    <string name="language">اللغة</string>
+    <string name="lang_arabic_sub">العربية (الافتراضية)</string>
+    <string name="lang_english_sub">الإنجليزية</string>
+    <string name="about">حول</string>
+    <string name="version">الإصدار</string>
+
+    <string name="fajr_khatm">أذكار الفجر</string>
+    <string name="duhur_khatm">أذكار الظهر</string>
+    <string name="asr_khatm">أذكار العصر</string>
+    <string name="maghrib_khatm">أذكار المغرب</string>
+    <string name="ishaa_khatm">أذكار العشاء</string>
+    <string name="info_title">السند</string>
+    <string name="history_title">الإحصائيات</string>
+    <string name="by_day">باليوم</string>
+    <string name="by_zekr">بالذكر</string>
+</resources>

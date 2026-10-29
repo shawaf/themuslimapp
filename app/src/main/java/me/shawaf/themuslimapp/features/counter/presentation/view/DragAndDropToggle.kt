@@ -29,6 +29,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
@@ -36,6 +37,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
+import me.shawaf.themuslimapp.R
 import me.shawaf.themuslimapp.ui.theme.NoorColors
 
 @Composable
@@ -78,7 +80,7 @@ fun DragAndDropToggle(
             },
     ) {
         Text(
-            text = "Slide to count  ⟩⟩",
+            text = "${stringResource(R.string.slide_to_count)}  ⟩⟩",
             color = Color.White.copy(alpha = 0.65f),
             fontSize = 14.sp,
             fontWeight = FontWeight.SemiBold,

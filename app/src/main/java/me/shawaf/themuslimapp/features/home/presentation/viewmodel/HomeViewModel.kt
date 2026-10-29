@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import me.shawaf.themuslimapp.features.calendar.domain.HijriCalendarCalculator
 import me.shawaf.themuslimapp.features.prayer.domain.usecase.GetPrayerDataUseCase
+import me.shawaf.themuslimapp.utils.LocaleHelper
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -50,6 +51,7 @@ class HomeViewModel @Inject constructor(
         val sunrise = slots.firstOrNull { it.key == "SUNRISE" }?.epochMillis
         val sunset = slots.firstOrNull { it.key == "MAGHRIB" }?.epochMillis
         val next = slots.filter { it.canAzan }.firstOrNull { it.epochMillis > now }
+        val ar = LocaleHelper.isArabic()
 
         val progress = if (sunrise != null && sunset != null && sunset > sunrise) {
             ((now - sunrise).toFloat() / (sunset - sunrise)).coerceIn(0f, 1f)
@@ -58,13 +60,13 @@ class HomeViewModel @Inject constructor(
         }
 
         val prayers = slots.filter { it.canAzan }.map {
-            PrayerTimeUi(it.nameEn, shortFormat.format(Date(it.epochMillis)), it.key == next?.key)
+            PrayerTimeUi(if (ar) it.nameAr else it.nameEn, shortFormat.format(Date(it.epochMillis)), it.key == next?.key)
         }
 
         _viewState.value = HomeViewState(
-            location = data.location.label.ifEmpty { "My location" },
+            location = data.location.label.ifEmpty { if (ar) "موقعي" else "My location" },
             hijriDate = hijriCalendarCalculator.hijriTodayArabic(),
-            nextPrayerName = next?.nameEn.orEmpty(),
+            nextPrayerName = next?.let { if (ar) it.nameAr else it.nameEn }.orEmpty(),
             nextPrayerTime = next?.let { timeFormat.format(Date(it.epochMillis)) }.orEmpty(),
             countdown = next?.let { formatCountdown(it.epochMillis - now) }.orEmpty(),
             sunProgress = progress,
@@ -82,6 +84,10 @@ class HomeViewModel @Inject constructor(
         val totalMinutes = diffMillis / 60000
         val hours = totalMinutes / 60
         val minutes = totalMinutes % 60
-        return if (hours > 0) "in ${hours}h ${minutes}m" else "in ${minutes}m"
+        return if (LocaleHelper.isArabic()) {
+            if (hours > 0) "بعد ${hours}س ${minutes}د" else "بعد ${minutes}د"
+        } else {
+            if (hours > 0) "in ${hours}h ${minutes}m" else "in ${minutes}m"
+        }
     }
 }

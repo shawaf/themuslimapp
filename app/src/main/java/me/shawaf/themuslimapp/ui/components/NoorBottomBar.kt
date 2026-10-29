@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import me.shawaf.themuslimapp.ui.navigation.bottomNavTabs
 import me.shawaf.themuslimapp.ui.theme.NoorColors
@@ -30,17 +31,18 @@ fun NoorBottomBar(
     ) {
         bottomNavTabs.forEach { tab ->
             val selected = currentRoute == tab.route
+            val label = stringResource(tab.labelRes)
             NavigationBarItem(
                 selected = selected,
                 onClick = { if (!selected) onTabSelected(tab.route) },
                 icon = {
                     Icon(
                         painter = painterResource(tab.iconRes),
-                        contentDescription = tab.label,
+                        contentDescription = label,
                         modifier = Modifier.size(22.dp),
                     )
                 },
-                label = { Text(text = tab.label, style = MaterialTheme.typography.labelSmall) },
+                label = { Text(text = label, style = MaterialTheme.typography.labelSmall) },
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = NoorColors.Emerald,
                     selectedTextColor = NoorColors.Emerald,

@@ -44,6 +44,7 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -91,7 +92,7 @@ fun HomeScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text("Explore", color = MaterialTheme.colorScheme.onBackground, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                Text(stringResource(R.string.explore), color = MaterialTheme.colorScheme.onBackground, fontSize = 16.sp, fontWeight = FontWeight.Bold)
                 if (state.hijriDate.isNotEmpty()) {
                     Text(state.hijriDate, color = NoorColors.Emerald, fontSize = 13.sp, fontFamily = AmiriFontFamily)
                 }
@@ -165,8 +166,8 @@ private fun Hero(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Column {
-                    Text("Assalamu Alaikum", color = Color(0xFFCFE3DC), fontSize = 12.5.sp)
-                    Text("Peace be upon you", color = Color.White, fontSize = 19.sp, fontWeight = FontWeight.Bold)
+                    Text(stringResource(R.string.greeting_salam), color = Color(0xFFCFE3DC), fontSize = 12.5.sp)
+                    Text(stringResource(R.string.greeting_peace), color = Color.White, fontSize = 19.sp, fontWeight = FontWeight.Bold)
                 }
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Row(
@@ -215,7 +216,7 @@ private fun Hero(
                     drawCircle(Color(0xFFFFD572), 6.5.dp.toPx(), Offset(sunX, sunY))
                 }
                 Column(modifier = Modifier.align(Alignment.TopCenter).padding(top = 42.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text("NEXT · ${nextPrayerName.uppercase()} · $countdown", color = Color(0xFF9FC6BA), fontSize = 11.sp, fontWeight = FontWeight.SemiBold)
+                    Text("${stringResource(R.string.next_label)} · $nextPrayerName · $countdown", color = Color(0xFF9FC6BA), fontSize = 11.sp, fontWeight = FontWeight.SemiBold)
                     Text(nextPrayerTime, color = Color.White, fontSize = 32.sp, fontWeight = FontWeight.ExtraBold)
                     Spacer(Modifier.height(8.dp))
                     Row(
@@ -226,11 +227,11 @@ private fun Hero(
                     ) {
                         Icon(Icons.Default.PlayArrow, null, tint = NoorColors.GoldLight, modifier = Modifier.size(15.dp))
                         Spacer(Modifier.size(6.dp))
-                        Text(if (isAzanPlaying) "Playing Adhan…" else "Play Adhan", color = NoorColors.GoldLight, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                        Text(stringResource(if (isAzanPlaying) R.string.playing_adhan else R.string.play_adhan), color = NoorColors.GoldLight, fontSize = 12.sp, fontWeight = FontWeight.Bold)
                     }
                 }
-                EndLabel(sunriseTime, "Sunrise", Modifier.align(Alignment.BottomStart))
-                EndLabel(sunsetTime, "Sunset", Modifier.align(Alignment.BottomEnd))
+                EndLabel(sunriseTime, stringResource(R.string.sunrise), Modifier.align(Alignment.BottomStart))
+                EndLabel(sunsetTime, stringResource(R.string.sunset), Modifier.align(Alignment.BottomEnd))
             }
 
             // Timeline
@@ -260,22 +261,23 @@ private fun EndLabel(time: String, label: String, modifier: Modifier = Modifier)
     }
 }
 
-private data class FeatureTile(val label: String, val iconRes: Int, val route: String)
+private data class FeatureTile(val labelRes: Int, val iconRes: Int, val route: String)
 
 @Composable
 private fun FeatureGrid(onNavigate: (String) -> Unit) {
     val tiles = listOf(
-        FeatureTile("Sebha", R.drawable.ic_feat_sebha, NoorRoutes.SEBHA),
-        FeatureTile("Prayer", R.drawable.ic_feat_prayer, NoorRoutes.PRAYER),
-        FeatureTile("Qibla", R.drawable.ic_feat_qibla, NoorRoutes.QIBLA),
-        FeatureTile("Duas", R.drawable.ic_feat_duas, NoorRoutes.DUAS),
-        FeatureTile("Hadith", R.drawable.ic_feat_hadith, NoorRoutes.HADITH),
-        FeatureTile("Calendar", R.drawable.ic_feat_calendar, NoorRoutes.CALENDAR),
+        FeatureTile(R.string.nav_sebha, R.drawable.ic_feat_sebha, NoorRoutes.SEBHA),
+        FeatureTile(R.string.nav_prayer, R.drawable.ic_feat_prayer, NoorRoutes.PRAYER),
+        FeatureTile(R.string.nav_qibla, R.drawable.ic_feat_qibla, NoorRoutes.QIBLA),
+        FeatureTile(R.string.nav_duas, R.drawable.ic_feat_duas, NoorRoutes.DUAS),
+        FeatureTile(R.string.feat_hadith, R.drawable.ic_feat_hadith, NoorRoutes.HADITH),
+        FeatureTile(R.string.feat_calendar, R.drawable.ic_feat_calendar, NoorRoutes.CALENDAR),
     )
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         tiles.chunked(3).forEach { rowTiles ->
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 rowTiles.forEach { tile ->
+                    val label = stringResource(tile.labelRes)
                     Column(
                         modifier = Modifier.weight(1f)
                             .shadow(6.dp, RoundedCornerShape(20.dp), clip = false)
@@ -287,10 +289,10 @@ private fun FeatureGrid(onNavigate: (String) -> Unit) {
                             modifier = Modifier.size(42.dp).clip(RoundedCornerShape(14.dp)).background(MaterialTheme.colorScheme.surfaceVariant),
                             contentAlignment = Alignment.Center,
                         ) {
-                            Icon(painterResource(tile.iconRes), tile.label, tint = NoorColors.Emerald, modifier = Modifier.size(22.dp))
+                            Icon(painterResource(tile.iconRes), label, tint = NoorColors.Emerald, modifier = Modifier.size(22.dp))
                         }
                         Spacer(Modifier.height(8.dp))
-                        Text(tile.label, color = MaterialTheme.colorScheme.onBackground, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+                        Text(label, color = MaterialTheme.colorScheme.onBackground, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
                     }
                 }
             }
@@ -307,7 +309,7 @@ private fun DuaCard(arabic: String, translation: String) {
             .background(Brush.linearGradient(listOf(NoorColors.EmeraldDark, NoorColors.Emerald)))
             .padding(18.dp),
     ) {
-        Text("DUA OF THE DAY", color = NoorColors.GoldLight, fontSize = 11.sp, fontWeight = FontWeight.Bold)
+        Text(stringResource(R.string.dua_of_the_day).uppercase(), color = NoorColors.GoldLight, fontSize = 11.sp, fontWeight = FontWeight.Bold)
         Spacer(Modifier.height(10.dp))
         Text(arabic, color = Color.White, fontSize = 22.sp, fontFamily = AmiriFontFamily, fontWeight = FontWeight.Bold, lineHeight = 38.sp, modifier = Modifier.fillMaxWidth())
         Spacer(Modifier.height(8.dp))

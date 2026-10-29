@@ -1,25 +1,94 @@
 <resources>
-    <string name="app_name">برنامج المسلم</string>
+    <string name="app_name">Noor</string>
 
-    //SharedPrefers
-    <string name="preference_file_key">MainSharedPrefersKey</string>
-    <string name="prefers_config_key">Config</string>
+    <!-- SharedPrefs (not translatable) -->
+    <string name="preference_file_key" translatable="false">MainSharedPrefersKey</string>
+    <string name="prefers_config_key" translatable="false">Config</string>
 
-    // Counter
-    <string name="salat_khatm">ختام الصلاة</string>
-    <string name="fajr_khatm">ختام صلاة الفجر</string>
-    <string name="duhur_khatm">ختام صلاة الظهر</string>
-    <string name="asr_khatm">ختام صلاة العصر</string>
-    <string name="maghrib_khatm">ختام صلاة المغرب</string>
-    <string name="ishaa_khatm">ختام صلاة العشاء</string>
+    <!-- Counter / Sebha -->
+    <string name="salat_khatm">Dhikr after Salah</string>
+    <string name="count_number">Count: %s</string>
+    <string name="slide_to_count">Slide to count</string>
 
-    //Info
-    <string name="info_title">السند</string>
-    <string name="count_number">عدد المرات: %s</string>
+    <!-- Bottom nav / features -->
+    <string name="nav_home">Home</string>
+    <string name="nav_prayer">Prayer</string>
+    <string name="nav_qibla">Qibla</string>
+    <string name="nav_sebha">Sebha</string>
+    <string name="nav_duas">Duas</string>
+    <string name="feat_hadith">Hadith</string>
+    <string name="feat_calendar">Calendar</string>
 
-    //History
-    <string name="history_title">احصائيات</string>
-    <string name="by_day">باليوم</string>
-    <string name="by_zekr">بالذكر</string>
+    <!-- Home -->
+    <string name="greeting_salam">Assalamu Alaikum</string>
+    <string name="greeting_peace">Peace be upon you</string>
+    <string name="my_location">My location</string>
+    <string name="explore">Explore</string>
+    <string name="next_label">Next</string>
+    <string name="play_adhan">Play Adhan</string>
+    <string name="playing_adhan">Playing Adhan…</string>
+    <string name="dua_of_the_day">Dua of the day</string>
+    <string name="sunrise">Sunrise</string>
+    <string name="sunset">Sunset</string>
 
+    <!-- Prayer -->
+    <string name="prayer_times">Prayer Times</string>
+    <string name="up_next">Up next</string>
+    <string name="current">Current</string>
+
+    <!-- Qibla -->
+    <string name="qibla_compass">Qibla Compass</string>
+    <string name="direction_to_makkah">Direction to Makkah</string>
+    <string name="facing_qibla">✓ You\'re facing the Qibla</string>
+    <string name="rotate_to_qibla">Rotate until the arrow points up</string>
+    <string name="distance">Distance</string>
+    <string name="qibla_bearing">Qibla bearing</string>
+    <string name="using_default">default</string>
+
+    <!-- Duas -->
+    <string name="duas_azkar">Duas &amp; Azkar</string>
+    <string name="search_duas">Search duas &amp; azkar…</string>
+    <string name="no_duas">No duas found</string>
+    <string name="azkar_suffix">Azkar</string>
+    <string name="adhkar_count">%d adhkar</string>
+
+    <!-- Hadith -->
+    <string name="hadith_library">Hadith Library</string>
+    <string name="collection">Collection</string>
+    <string name="hadith_count">%s hadith</string>
+    <string name="hadith_of_the_day">Hadith of the day</string>
+    <string name="browse_hadith">Browse hadith</string>
+
+    <!-- Calendar -->
+    <string name="islamic_calendar">Islamic Calendar</string>
+    <string name="events_this_year">Events this year</string>
+    <string name="event_today">Today</string>
+    <string name="event_in_days">in %dd</string>
+    <string name="event_days_ago">%dd ago</string>
+
+    <!-- Settings -->
+    <string name="settings">Settings</string>
+    <string name="appearance">Appearance</string>
+    <string name="theme_system">System default</string>
+    <string name="theme_system_sub">Follow the device theme</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_light_sub">Ivory &amp; emerald</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_dark_sub">Dim emerald night mode</string>
+    <string name="language">Language</string>
+    <string name="lang_arabic_sub">Arabic (default)</string>
+    <string name="lang_english_sub">English</string>
+    <string name="about">About</string>
+    <string name="version">Version</string>
+
+    <!-- Legacy (Info / History / Counter) -->
+    <string name="fajr_khatm">Fajr dhikr</string>
+    <string name="duhur_khatm">Dhuhr dhikr</string>
+    <string name="asr_khatm">Asr dhikr</string>
+    <string name="maghrib_khatm">Maghrib dhikr</string>
+    <string name="ishaa_khatm">Isha dhikr</string>
+    <string name="info_title">Sanad</string>
+    <string name="history_title">Statistics</string>
+    <string name="by_day">By day</string>
+    <string name="by_zekr">By dhikr</string>
 </resources>

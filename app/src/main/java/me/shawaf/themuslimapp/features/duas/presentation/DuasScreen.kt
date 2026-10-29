@@ -35,6 +35,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -47,6 +48,7 @@ import me.shawaf.themuslimapp.features.duas.presentation.viewmodel.DuasIntent
 import me.shawaf.themuslimapp.features.duas.presentation.viewmodel.DuasViewModel
 import me.shawaf.themuslimapp.ui.theme.AmiriFontFamily
 import me.shawaf.themuslimapp.ui.theme.NoorColors
+import me.shawaf.themuslimapp.utils.LocaleHelper
 
 @Composable
 fun DuasScreen(duasViewModel: DuasViewModel) {
@@ -54,7 +56,7 @@ fun DuasScreen(duasViewModel: DuasViewModel) {
     val selected = state.categories.firstOrNull { it.id == state.selectedCategoryId } ?: state.categories.firstOrNull()
 
     Column(modifier = Modifier.fillMaxSize().padding(horizontal = 20.dp).padding(top = 18.dp)) {
-        Text("Duas & Azkar", color = MaterialTheme.colorScheme.onBackground, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+        Text(stringResource(R.string.duas_azkar), color = MaterialTheme.colorScheme.onBackground, fontSize = 20.sp, fontWeight = FontWeight.Bold)
         Spacer(Modifier.height(14.dp))
 
         LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp), contentPadding = PaddingValues(bottom = 16.dp)) {
@@ -77,12 +79,13 @@ fun DuasScreen(duasViewModel: DuasViewModel) {
                 }
             }
             item {
-                Text(selected?.titleEn ?: "", color = MaterialTheme.colorScheme.onBackground, fontSize = 14.sp,
+                val secName = selected?.let { if (LocaleHelper.isArabic()) it.titleAr else it.titleEn } ?: ""
+                Text(secName, color = MaterialTheme.colorScheme.onBackground, fontSize = 14.sp,
                     fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 4.dp))
             }
             val duas = state.visibleDuas
             if (!state.isLoading && duas.isEmpty()) {
-                item { Text("No duas found", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp) }
+                item { Text(stringResource(R.string.no_duas), color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp) }
             } else {
                 items(duas) { dua -> DuaCard(dua) }
             }
@@ -102,10 +105,11 @@ private fun FeaturedCard(category: DuaCategory, selected: Boolean, iconRes: Int,
             )
             .clickable(onClick = onClick).padding(15.dp),
     ) {
+        val catName = if (LocaleHelper.isArabic()) category.titleAr else category.titleEn
         Icon(painterResource(iconRes), null, tint = if (selected) NoorColors.GoldLight else NoorColors.Gold, modifier = Modifier.size(16.dp))
         Spacer(Modifier.height(10.dp))
-        Text("${category.titleEn} Azkar", color = if (selected) Color.White else MaterialTheme.colorScheme.onBackground, fontSize = 14.sp, fontWeight = FontWeight.Bold)
-        Text("${category.duas.size} adhkar", color = if (selected) Color(0xFFA9CCC0) else MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 11.sp)
+        Text("$catName ${stringResource(R.string.azkar_suffix)}", color = if (selected) Color.White else MaterialTheme.colorScheme.onBackground, fontSize = 14.sp, fontWeight = FontWeight.Bold)
+        Text(stringResource(R.string.adhkar_count, category.duas.size), color = if (selected) Color(0xFFA9CCC0) else MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 11.sp)
     }
 }
 
@@ -121,7 +125,7 @@ private fun SearchField(query: String, onQueryChange: (String) -> Unit) {
         Icon(Icons.Default.Search, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(18.dp))
         Spacer(Modifier.size(10.dp))
         Box(Modifier.fillMaxWidth()) {
-            if (query.isEmpty()) Text("Search duas & azkar…", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp)
+            if (query.isEmpty()) Text(stringResource(R.string.search_duas), color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp)
             BasicTextField(
                 value = query, onValueChange = onQueryChange, singleLine = true,
                 textStyle = TextStyle(color = MaterialTheme.colorScheme.onBackground, fontSize = 14.sp),
@@ -137,7 +141,7 @@ private fun CategoryChips(categories: List<DuaCategory>, selectedId: String, onS
         categories.forEach { category ->
             val sel = category.id == selectedId
             Text(
-                text = category.titleEn,
+                text = if (LocaleHelper.isArabic()) category.titleAr else category.titleEn,
                 color = if (sel) NoorColors.Surface else NoorColors.Emerald,
                 fontSize = 12.sp, fontWeight = if (sel) FontWeight.Bold else FontWeight.SemiBold,
                 modifier = Modifier.clip(RoundedCornerShape(20.dp))

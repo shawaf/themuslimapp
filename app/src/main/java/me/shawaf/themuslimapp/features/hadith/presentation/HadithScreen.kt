@@ -33,11 +33,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import me.shawaf.themuslimapp.R
 import me.shawaf.themuslimapp.data.local.model.HadithCollection
 import me.shawaf.themuslimapp.data.local.model.HadithItem
 import me.shawaf.themuslimapp.features.hadith.presentation.viewmodel.HadithIntent
@@ -45,6 +47,7 @@ import me.shawaf.themuslimapp.features.hadith.presentation.viewmodel.HadithViewM
 import me.shawaf.themuslimapp.ui.components.NoorScreenHeader
 import me.shawaf.themuslimapp.ui.theme.AmiriFontFamily
 import me.shawaf.themuslimapp.ui.theme.NoorColors
+import me.shawaf.themuslimapp.utils.LocaleHelper
 
 @Composable
 fun HadithScreen(hadithViewModel: HadithViewModel, onBack: () -> Unit) {
@@ -52,7 +55,7 @@ fun HadithScreen(hadithViewModel: HadithViewModel, onBack: () -> Unit) {
     val hadiths = state.hadiths
 
     Column(modifier = Modifier.fillMaxSize().padding(horizontal = 20.dp).padding(top = 18.dp)) {
-        NoorScreenHeader("Hadith Library", onBack)
+        NoorScreenHeader(stringResource(R.string.hadith_library), onBack)
         Spacer(Modifier.height(14.dp))
 
         Row(modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -68,7 +71,7 @@ fun HadithScreen(hadithViewModel: HadithViewModel, onBack: () -> Unit) {
         LazyColumn(verticalArrangement = Arrangement.spacedBy(9.dp), contentPadding = PaddingValues(bottom = 16.dp)) {
             hadiths.firstOrNull()?.let { featured -> item { FeaturedHadith(featured) } }
             item {
-                Text("Browse hadith", color = MaterialTheme.colorScheme.onBackground, fontSize = 13.5.sp,
+                Text(stringResource(R.string.browse_hadith), color = MaterialTheme.colorScheme.onBackground, fontSize = 13.5.sp,
                     fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 12.dp, bottom = 2.dp))
             }
             itemsIndexed(hadiths) { index, hadith -> BrowseRow(index + 1, hadith) }
@@ -88,11 +91,11 @@ private fun CollectionCard(collection: HadithCollection, selected: Boolean, onCl
             )
             .clickable(onClick = onClick).padding(14.dp),
     ) {
-        Text("Collection", color = if (selected) Color(0xFFA9CCC0) else MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 11.sp, fontWeight = FontWeight.SemiBold)
+        Text(stringResource(R.string.collection), color = if (selected) Color(0xFFA9CCC0) else MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 11.sp, fontWeight = FontWeight.SemiBold)
         Spacer(Modifier.height(4.dp))
-        Text(collection.nameEn, color = if (selected) Color.White else MaterialTheme.colorScheme.onBackground, fontSize = 14.sp, fontWeight = FontWeight.Bold)
+        Text(if (LocaleHelper.isArabic()) collection.nameAr else collection.nameEn, color = if (selected) Color.White else MaterialTheme.colorScheme.onBackground, fontSize = 14.sp, fontWeight = FontWeight.Bold)
         Spacer(Modifier.height(8.dp))
-        Text("${"%,d".format(collection.total)} hadith", color = if (selected) NoorColors.GoldLight else NoorColors.Gold, fontSize = 11.sp, fontWeight = FontWeight.SemiBold)
+        Text(stringResource(R.string.hadith_count, "%,d".format(collection.total)), color = if (selected) NoorColors.GoldLight else NoorColors.Gold, fontSize = 11.sp, fontWeight = FontWeight.SemiBold)
     }
 }
 
@@ -105,7 +108,7 @@ private fun FeaturedHadith(hadith: HadithItem) {
             .background(Brush.linearGradient(listOf(NoorColors.EmeraldDark, NoorColors.Emerald)))
             .padding(18.dp),
     ) {
-        Text("HADITH OF THE DAY", color = NoorColors.GoldLight, fontSize = 11.sp, fontWeight = FontWeight.Bold)
+        Text(stringResource(R.string.hadith_of_the_day).uppercase(), color = NoorColors.GoldLight, fontSize = 11.sp, fontWeight = FontWeight.Bold)
         Spacer(Modifier.height(10.dp))
         Text(hadith.ar, color = Color.White, fontSize = 21.sp, fontFamily = AmiriFontFamily, fontWeight = FontWeight.Bold,
             textAlign = TextAlign.End, lineHeight = 36.sp, modifier = Modifier.fillMaxWidth())

@@ -7,10 +7,13 @@ import java.time.LocalDate
 import java.time.chrono.HijrahDate
 import java.time.format.TextStyle
 import java.time.temporal.ChronoField
+import me.shawaf.themuslimapp.utils.LocaleHelper
 import java.util.Locale
 import javax.inject.Inject
 
-private data class EventDef(val name: String, val m: Int, val d: Int, val desc: String)
+private data class EventDef(
+    val name: String, val nameAr: String, val m: Int, val d: Int, val desc: String, val descAr: String,
+)
 
 /** Produces the current Hijri month grid and upcoming Islamic events via java.time. */
 class HijriCalendarCalculator @Inject constructor() {
@@ -74,28 +77,29 @@ class HijriCalendarCalculator @Inject constructor() {
 
         // name, hijri month (1-based), hijri day, description — a full year of notable days
         val defs = listOf(
-            EventDef("Islamic New Year", 1, 1, "Start of Muharram"),
-            EventDef("Day of Ashura", 1, 10, "Recommended fasting"),
-            EventDef("Mawlid an-Nabi", 3, 12, "Birth of the Prophet ﷺ"),
-            EventDef("Isra & Mi'raj", 7, 27, "The Night Journey"),
-            EventDef("Mid-Sha'ban", 8, 15, "Laylat al-Bara'ah"),
-            EventDef("First of Ramadan", 9, 1, "Start of fasting"),
-            EventDef("Laylat al-Qadr", 9, 27, "The Night of Decree"),
-            EventDef("Eid al-Fitr", 10, 1, "Festival of breaking the fast"),
-            EventDef("First of Dhul-Hijjah", 12, 1, "The ten blessed days"),
-            EventDef("Day of Arafah", 12, 9, "Recommended fasting"),
-            EventDef("Eid al-Adha", 12, 10, "Festival of Sacrifice"),
-            EventDef("Days of Tashreeq", 12, 11, "11th–13th Dhul-Hijjah"),
+            EventDef("Islamic New Year", "رأس السنة الهجرية", 1, 1, "Start of Muharram", "بداية محرم"),
+            EventDef("Day of Ashura", "يوم عاشوراء", 1, 10, "Recommended fasting", "صيام مستحب"),
+            EventDef("Mawlid an-Nabi", "المولد النبوي", 3, 12, "Birth of the Prophet ﷺ", "مولد النبي ﷺ"),
+            EventDef("Isra & Mi'raj", "الإسراء والمعراج", 7, 27, "The Night Journey", "رحلة الإسراء والمعراج"),
+            EventDef("Mid-Sha'ban", "منتصف شعبان", 8, 15, "Laylat al-Bara'ah", "ليلة البراءة"),
+            EventDef("First of Ramadan", "أول رمضان", 9, 1, "Start of fasting", "بداية الصيام"),
+            EventDef("Laylat al-Qadr", "ليلة القدر", 9, 27, "The Night of Decree", "ليلة القدر"),
+            EventDef("Eid al-Fitr", "عيد الفطر", 10, 1, "Festival of breaking the fast", "عيد الفطر المبارك"),
+            EventDef("First of Dhul-Hijjah", "أول ذي الحجة", 12, 1, "The ten blessed days", "العشر المباركة"),
+            EventDef("Day of Arafah", "يوم عرفة", 12, 9, "Recommended fasting", "صيام مستحب"),
+            EventDef("Eid al-Adha", "عيد الأضحى", 12, 10, "Festival of Sacrifice", "عيد الأضحى المبارك"),
+            EventDef("Days of Tashreeq", "أيام التشريق", 12, 11, "11th–13th Dhul-Hijjah", "١١-١٣ ذو الحجة"),
         )
 
+        val ar = LocaleHelper.isArabic()
         val events = defs.mapNotNull { def ->
             val hd = runCatching { HijrahDate.of(hYear, def.m, def.d) }.getOrNull() ?: return@mapNotNull null
             val epoch = hd.toEpochDay()
             IslamicEvent(
-                nameEn = def.name,
-                description = def.desc,
+                nameEn = if (ar) def.nameAr else def.name,
+                description = if (ar) def.descAr else def.desc,
                 hijriDay = def.d,
-                hijriMonthEn = monthsEn[def.m - 1],
+                hijriMonthEn = if (ar) monthsAr[def.m - 1] else monthsEn[def.m - 1],
                 daysAway = (epoch - todayEpoch).toInt(),
             )
         }.sortedBy { it.daysAway }

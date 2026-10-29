@@ -10,6 +10,7 @@ import me.shawaf.themuslimapp.features.calendar.domain.HijriCalendarCalculator
 import me.shawaf.themuslimapp.features.prayer.domain.model.PrayerData
 import me.shawaf.themuslimapp.features.prayer.domain.usecase.GetPrayerDataUseCase
 import me.shawaf.themuslimapp.features.prayer.domain.usecase.SetAzanEnabledUseCase
+import me.shawaf.themuslimapp.utils.LocaleHelper
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -66,14 +67,16 @@ class PrayerViewModel @Inject constructor(
             String.format(Locale.US, "%.3f, %.3f", data.location.latitude, data.location.longitude)
         }
 
+        val ar = LocaleHelper.isArabic()
         val weekday = SimpleDateFormat("EEEE", Locale.getDefault()).format(Date())
+        val hijri = if (ar) hijriCalendarCalculator.hijriTodayArabic() else hijriCalendarCalculator.hijriTodayEnglish()
         return PrayerViewState(
-            dateLabel = "$weekday, ${hijriCalendarCalculator.hijriTodayEnglish()}",
+            dateLabel = "$weekday · $hijri",
             locationLabel = locationLabel,
             usingDefaultLocation = data.usingDefaultLocation,
             calcMethodLabel = prettyMethod(data.settings.calcMethod),
             slots = uiSlots,
-            nextNameEn = next?.nameEn.orEmpty(),
+            nextNameEn = next?.let { if (ar) it.nameAr else it.nameEn }.orEmpty(),
             nextTimeText = next?.let { timeFormat.format(Date(it.epochMillis)) }.orEmpty(),
             countdown = next?.let { formatCountdown(it.epochMillis - now) }.orEmpty(),
             isLoading = false,
@@ -85,7 +88,11 @@ class PrayerViewModel @Inject constructor(
         val totalMinutes = diffMillis / 60000
         val hours = totalMinutes / 60
         val minutes = totalMinutes % 60
-        return if (hours > 0) "in ${hours}h ${minutes}m" else "in ${minutes}m"
+        return if (LocaleHelper.isArabic()) {
+            if (hours > 0) "بعد ${hours}س ${minutes}د" else "بعد ${minutes}د"
+        } else {
+            if (hours > 0) "in ${hours}h ${minutes}m" else "in ${minutes}m"
+        }
     }
 
     private fun prettyMethod(raw: String): String =

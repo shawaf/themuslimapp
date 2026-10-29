@@ -42,6 +42,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -57,6 +58,7 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import me.shawaf.themuslimapp.BuildConfig
+import me.shawaf.themuslimapp.R
 import me.shawaf.themuslimapp.features.qibla.presentation.viewmodel.QiblaIntent
 import me.shawaf.themuslimapp.features.qibla.presentation.viewmodel.QiblaViewModel
 import me.shawaf.themuslimapp.ui.theme.NoorColors
@@ -85,14 +87,14 @@ fun QiblaScreen(qiblaViewModel: QiblaViewModel) {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Text("Qibla Compass", color = MaterialTheme.colorScheme.onBackground, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            Text(stringResource(R.string.qibla_compass), color = MaterialTheme.colorScheme.onBackground, fontSize = 20.sp, fontWeight = FontWeight.Bold)
             Spacer(Modifier.weight(1f))
-            Text(state.locationLabel + if (state.usingDefaultLocation) " · default" else "",
+            Text(state.locationLabel + if (state.usingDefaultLocation) " · ${stringResource(R.string.using_default)}" else "",
                 color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp)
         }
 
         Spacer(Modifier.height(10.dp))
-        Text("Direction to Makkah", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+        Text(stringResource(R.string.direction_to_makkah), color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
         Text("${state.bearing.toInt()}°", color = NoorColors.Gold, fontSize = 30.sp, fontWeight = FontWeight.ExtraBold)
 
         Spacer(Modifier.height(18.dp))
@@ -100,7 +102,7 @@ fun QiblaScreen(qiblaViewModel: QiblaViewModel) {
         Spacer(Modifier.height(20.dp))
 
         Text(
-            text = if (facingQibla) "✓ You're facing the Qibla" else "Rotate until the arrow points up",
+            text = if (facingQibla) stringResource(R.string.facing_qibla) else stringResource(R.string.rotate_to_qibla),
             color = if (facingQibla) MaterialTheme.colorScheme.surface else NoorColors.Emerald,
             fontSize = 14.sp, fontWeight = FontWeight.Bold,
             modifier = Modifier.clip(RoundedCornerShape(22.dp))
@@ -115,8 +117,8 @@ fun QiblaScreen(qiblaViewModel: QiblaViewModel) {
                 .clip(RoundedCornerShape(18.dp)).background(MaterialTheme.colorScheme.surface).padding(16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            InfoCell("Distance", "${state.distanceKm} km")
-            InfoCell("Qibla bearing", "${state.bearing.toInt()}° from N")
+            InfoCell(stringResource(R.string.distance), "${state.distanceKm} km")
+            InfoCell(stringResource(R.string.qibla_bearing), "${state.bearing.toInt()}°")
         }
 
         if (BuildConfig.MAPS_API_KEY.isNotBlank() && state.latitude != 0.0) {
