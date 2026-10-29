@@ -51,6 +51,14 @@ class HijriCalendarCalculator @Inject constructor() {
         return "${toArabicDigits(d)} ${monthsAr[m - 1]} ${toArabicDigits(y)}"
     }
 
+    /** Today's Hijri date in English, e.g. "14 Shawwal". */
+    fun hijriTodayEnglish(): String {
+        val today = HijrahDate.now()
+        val d = today.get(ChronoField.DAY_OF_MONTH)
+        val m = today.get(ChronoField.MONTH_OF_YEAR)
+        return "$d ${monthsEn[m - 1]}"
+    }
+
     private fun toArabicDigits(n: Int): String {
         val ar = "٠١٢٣٤٥٦٧٨٩"
         return n.toString().map { if (it.isDigit()) ar[it - '0'] else it }.joinToString("")

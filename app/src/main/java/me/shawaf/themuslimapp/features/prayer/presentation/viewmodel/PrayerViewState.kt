@@ -15,6 +15,7 @@ data class PrayerSlotUi(
 
 @Immutable
 data class PrayerViewState(
+    val dateLabel: String = "",
     val locationLabel: String = "",
     val usingDefaultLocation: Boolean = false,
     val calcMethodLabel: String = "",

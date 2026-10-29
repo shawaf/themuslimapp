@@ -1,11 +1,12 @@
 package me.shawaf.themuslimapp.features.prayer.presentation
-import androidx.compose.material3.MaterialTheme
 
 import android.Manifest
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,10 +21,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Place
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -35,14 +34,26 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import me.shawaf.themuslimapp.R
 import me.shawaf.themuslimapp.features.prayer.presentation.viewmodel.PrayerIntent
 import me.shawaf.themuslimapp.features.prayer.presentation.viewmodel.PrayerSlotUi
 import me.shawaf.themuslimapp.features.prayer.presentation.viewmodel.PrayerViewModel
-import me.shawaf.themuslimapp.ui.theme.AmiriFontFamily
 import me.shawaf.themuslimapp.ui.theme.NoorColors
+
+private fun weatherIcon(key: String): Int = when (key) {
+    "FAJR" -> R.drawable.ic_w_fajr
+    "DHUHR" -> R.drawable.ic_w_dhuhr
+    "ASR" -> R.drawable.ic_w_asr
+    "MAGHRIB" -> R.drawable.ic_w_maghrib
+    "ISHA" -> R.drawable.ic_w_isha
+    else -> R.drawable.ic_w_dhuhr
+}
 
 @Composable
 fun PrayerScreen(prayerViewModel: PrayerViewModel) {
@@ -51,64 +62,81 @@ fun PrayerScreen(prayerViewModel: PrayerViewModel) {
     val permissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions(),
     ) { prayerViewModel.handleIntent(PrayerIntent.Load) }
-
     LaunchedEffect(Unit) {
         val permissions = buildList {
             add(Manifest.permission.ACCESS_FINE_LOCATION)
             add(Manifest.permission.ACCESS_COARSE_LOCATION)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                add(Manifest.permission.POST_NOTIFICATIONS)
-            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) add(Manifest.permission.POST_NOTIFICATIONS)
         }
         permissionLauncher.launch(permissions.toTypedArray())
     }
 
-    Column(
-        modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())
-            .padding(horizontal = 20.dp).padding(top = 18.dp, bottom = 20.dp),
-    ) {
-        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Text("Prayer Times", color = MaterialTheme.colorScheme.onBackground, fontSize = 20.sp, fontWeight = FontWeight.Bold)
-            Spacer(Modifier.weight(1f))
-            Icon(Icons.Default.Place, null, tint = NoorColors.Gold, modifier = Modifier.size(15.dp))
-            Spacer(Modifier.size(4.dp))
-            Text(state.locationLabel + if (state.usingDefaultLocation) " · default" else "",
-                color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp)
-        }
-
-        Spacer(Modifier.height(16.dp))
-
-        // Up next
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .shadow(12.dp, RoundedCornerShape(22.dp), clip = false)
-                .clip(RoundedCornerShape(22.dp))
-                .background(Brush.linearGradient(listOf(NoorColors.Emerald, NoorColors.EmeraldDark)))
-                .padding(18.dp),
+    Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
+        // Header banner
+        Box(
+            modifier = Modifier.fillMaxWidth()
+                .clip(RoundedCornerShape(bottomStart = 30.dp, bottomEnd = 30.dp))
+                .background(Brush.linearGradient(listOf(NoorColors.Emerald, NoorColors.EmeraldDark))),
         ) {
-            Text("UP NEXT", color = NoorColors.GoldLight, fontSize = 11.sp, fontWeight = FontWeight.Bold)
-            Spacer(Modifier.height(6.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("${state.nextNameEn} · ${state.nextTimeText}", color = Color.White,
-                    fontSize = 20.sp, fontWeight = FontWeight.Bold)
-                Spacer(Modifier.weight(1f))
-                if (state.countdown.isNotEmpty()) {
-                    Text(state.countdown, color = NoorColors.GoldLight, fontSize = 13.sp, fontWeight = FontWeight.Bold)
+            Canvas(modifier = Modifier.matchParentSize()) {
+                val tile = 40f * density
+                val color = NoorColors.GoldLight.copy(alpha = 0.1f)
+                var row = 0; var y = -tile
+                while (y < size.height) {
+                    var x = if (row % 2 == 0) -tile else -tile / 2f
+                    while (x < size.width + tile) {
+                        val cx = x + tile / 2f; val cy = y + tile / 2f
+                        val p = Path().apply { moveTo(cx, y); lineTo(x + tile, cy); lineTo(cx, y + tile); lineTo(x, cy); close() }
+                        drawPath(p, color, style = Stroke(1f)); x += tile
+                    }
+                    y += tile; row++
+                }
+            }
+            Column(modifier = Modifier.padding(horizontal = 22.dp).padding(top = 22.dp, bottom = 22.dp)) {
+                Text("Prayer Times", color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                Text(state.dateLabel, color = Color(0xFF9FC6BA), fontSize = 12.sp)
+                Spacer(Modifier.height(16.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth()
+                        .clip(RoundedCornerShape(18.dp))
+                        .background(NoorColors.GoldLight.copy(alpha = 0.14f))
+                        .border(1.dp, NoorColors.GoldLight.copy(alpha = 0.3f), RoundedCornerShape(18.dp))
+                        .padding(horizontal = 16.dp, vertical = 14.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    Column {
+                        Text("UP NEXT", color = NoorColors.GoldLight, fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                        Text("${state.nextNameEn} · ${state.nextTimeText}", color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                    }
+                    if (state.countdown.isNotEmpty()) {
+                        Text(
+                            state.countdown.removePrefix("in "),
+                            color = Color(0xFFF0DEB4), fontSize = 13.sp, fontWeight = FontWeight.Bold,
+                            modifier = Modifier.clip(RoundedCornerShape(16.dp)).background(Color.Black.copy(alpha = 0.18f))
+                                .padding(horizontal = 12.dp, vertical = 7.dp),
+                        )
+                    }
                 }
             }
         }
 
-        Spacer(Modifier.height(16.dp))
-
-        Column(verticalArrangement = Arrangement.spacedBy(9.dp)) {
-            state.slots.forEach { slot ->
-                PrayerRow(slot) { prayerViewModel.handleIntent(PrayerIntent.ToggleAzan(slot.key)) }
+        Column(modifier = Modifier.padding(horizontal = 20.dp).padding(top = 16.dp, bottom = 20.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(9.dp)) {
+                state.slots.filter { it.canAzan }.forEach { slot ->
+                    PrayerRow(slot) { prayerViewModel.handleIntent(PrayerIntent.ToggleAzan(slot.key)) }
+                }
+            }
+            Spacer(Modifier.height(14.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp))
+                    .background(MaterialTheme.colorScheme.surfaceVariant).padding(horizontal = 16.dp, vertical = 13.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                Text("🔔 Azan · ${state.calcMethodLabel}", color = MaterialTheme.colorScheme.onBackground, fontSize = 12.5.sp, fontWeight = FontWeight.SemiBold)
             }
         }
-
-        Spacer(Modifier.height(16.dp))
-        Text("Calculation: ${state.calcMethodLabel}", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 11.sp)
     }
 }
 
@@ -116,36 +144,45 @@ fun PrayerScreen(prayerViewModel: PrayerViewModel) {
 private fun PrayerRow(slot: PrayerSlotUi, onToggleAzan: () -> Unit) {
     val isNext = slot.isNext
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .shadow(if (isNext) 8.dp else 4.dp, RoundedCornerShape(16.dp), clip = false)
+        modifier = Modifier.fillMaxWidth()
+            .shadow(if (isNext) 10.dp else 4.dp, RoundedCornerShape(16.dp), clip = false)
             .clip(RoundedCornerShape(16.dp))
-            .background(if (isNext) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.surface)
+            .background(
+                if (isNext) Brush.linearGradient(listOf(NoorColors.Emerald, NoorColors.EmeraldDark))
+                else Brush.linearGradient(listOf(MaterialTheme.colorScheme.surface, MaterialTheme.colorScheme.surface)),
+            )
             .padding(horizontal = 16.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        Column {
-            Text(slot.nameEn, color = if (isNext) NoorColors.Emerald else MaterialTheme.colorScheme.onBackground,
-                fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
-            Text(slot.nameAr, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 13.sp, fontFamily = AmiriFontFamily)
-        }
-        Spacer(Modifier.weight(1f))
-        Text(slot.timeText, color = MaterialTheme.colorScheme.onBackground, fontSize = 15.sp, fontWeight = FontWeight.Bold)
-        if (slot.canAzan) {
-            Spacer(Modifier.size(10.dp))
-            Box(
-                modifier = Modifier.size(34.dp).clip(RoundedCornerShape(12.dp))
-                    .background(if (slot.azanOn) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.surfaceVariant)
-                    .clickable(onClick = onToggleAzan),
-                contentAlignment = Alignment.Center,
-            ) {
-                Icon(Icons.Default.Notifications,
-                    if (slot.azanOn) "Azan on" else "Azan off",
-                    tint = if (slot.azanOn) NoorColors.Gold else MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.size(17.dp))
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                painterResource(weatherIcon(slot.key)),
+                contentDescription = null,
+                tint = if (isNext) NoorColors.GoldLight else NoorColors.Gold,
+                modifier = Modifier.size(20.dp),
+            )
+            Spacer(Modifier.size(12.dp))
+            Column {
+                Text(slot.nameEn, color = if (isNext) Color.White else MaterialTheme.colorScheme.onBackground,
+                    fontSize = 15.sp, fontWeight = if (isNext) FontWeight.Bold else FontWeight.SemiBold)
+                if (isNext) Text("Current", color = Color(0xFFA9CCC0), fontSize = 11.sp)
             }
-        } else {
-            Spacer(Modifier.size(44.dp))
+        }
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(slot.timeText, color = if (isNext) Color.White else MaterialTheme.colorScheme.onBackground,
+                fontSize = 15.sp, fontWeight = FontWeight.Bold)
+            Spacer(Modifier.size(12.dp))
+            Icon(
+                painterResource(R.drawable.ic_pray_fig),
+                contentDescription = if (slot.azanOn) "Azan on" else "Azan off",
+                tint = when {
+                    isNext -> NoorColors.GoldLight
+                    slot.azanOn -> NoorColors.Emerald
+                    else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                },
+                modifier = Modifier.size(18.dp).clickable(onClick = onToggleAzan),
+            )
         }
     }
 }

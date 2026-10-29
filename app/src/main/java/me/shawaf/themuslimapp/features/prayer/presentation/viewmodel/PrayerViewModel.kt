@@ -6,6 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import me.shawaf.themuslimapp.features.calendar.domain.HijriCalendarCalculator
 import me.shawaf.themuslimapp.features.prayer.domain.model.PrayerData
 import me.shawaf.themuslimapp.features.prayer.domain.usecase.GetPrayerDataUseCase
 import me.shawaf.themuslimapp.features.prayer.domain.usecase.SetAzanEnabledUseCase
@@ -18,6 +19,7 @@ import javax.inject.Inject
 class PrayerViewModel @Inject constructor(
     private val getPrayerDataUseCase: GetPrayerDataUseCase,
     private val setAzanEnabledUseCase: SetAzanEnabledUseCase,
+    private val hijriCalendarCalculator: HijriCalendarCalculator,
 ) : ViewModel() {
 
     private val _viewState = MutableStateFlow(PrayerViewState())
@@ -64,7 +66,9 @@ class PrayerViewModel @Inject constructor(
             String.format(Locale.US, "%.3f, %.3f", data.location.latitude, data.location.longitude)
         }
 
+        val weekday = SimpleDateFormat("EEEE", Locale.getDefault()).format(Date())
         return PrayerViewState(
+            dateLabel = "$weekday, ${hijriCalendarCalculator.hijriTodayEnglish()}",
             locationLabel = locationLabel,
             usingDefaultLocation = data.usingDefaultLocation,
             calcMethodLabel = prettyMethod(data.settings.calcMethod),
