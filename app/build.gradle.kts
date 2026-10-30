@@ -8,14 +8,14 @@ plugins {
 
 android {
     namespace = "me.shawaf.themuslimapp"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "me.shawaf.themuslimapp"
         minSdk = 24
-        targetSdk = 35
-        versionCode = 4
-        versionName = "3.0.1"
+        targetSdk = 36
+        versionCode = 5
+        versionName = "3.0.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
