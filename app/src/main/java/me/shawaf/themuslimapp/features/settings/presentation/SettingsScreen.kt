@@ -94,7 +94,7 @@ fun SettingsScreen(themeViewModel: ThemeViewModel, onBack: (() -> Unit)? = null)
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(stringResource(R.string.version), color = MaterialTheme.colorScheme.onBackground, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
-            Text("2.0.0", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp)
+            Text(me.shawaf.themuslimapp.BuildConfig.VERSION_NAME, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp)
         }
     }
 }
