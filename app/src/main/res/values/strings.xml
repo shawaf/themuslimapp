@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Noor</string>
+    <string name="app_name">The Muslim App</string>
     <string name="prayer_widget_description">Today\'s prayer times with a countdown to the next salah.</string>
 
     <!-- SharedPrefs (not translatable) -->
